@@ -1,0 +1,1 @@
+const VISITOR_COUNTER_DISPLAY = document.getElementById("visitor-counter-display")

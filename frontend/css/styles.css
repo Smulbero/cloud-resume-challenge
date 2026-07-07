@@ -1,0 +1,96 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+    background: #d9d9d9;
+    padding: 40px;
+    font-family: Arial, sans-serif;
+}
+
+main {
+    width: 210mm;
+    /* min-height: 300mm; */
+    margin: 0 auto;
+    background: white;
+    box-shadow: 0 0 20px rgba(0,0,0,.2);
+}
+
+/*******************************
+  Header and Footer
+*******************************/
+header, footer {
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+    background-color: #f1f1f1;
+}
+
+header {
+  color: #123E65;
+}
+
+/*******************************
+  Grid
+*******************************/
+.container {
+    display: grid;
+    grid-template-columns: 32% 68%;
+}
+
+/*******************************
+  Left section
+*******************************/
+#section-left {
+    background-color: #f1f1f1;
+}
+
+.section-left-header {
+  color: #123E65;
+  padding: 5px
+}
+.section-left-entry-header {
+  font-weight: bold;
+}
+.section-left-entry-content {
+  padding: 5px;
+}
+.section-left-entry-content-sub {
+  margin-bottom: 5px;
+}
+
+/*******************************
+  Right section
+*******************************/
+#section-right {
+}
+
+.section-right-header {
+  background-color: #123E65;
+  text-align: center;
+  color: white;
+  padding: 5px;
+  margin: 0px 0 5px 0;
+}
+
+.section-right-entry-header {
+  background-color: #f1f1f1;
+  padding: 3px;
+}
+
+.section-right-entry-content {
+  padding: 5px;
+  background-color: white;
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+.section-right-entry-content ul {
+  padding: 5px 5px 5px 20px;
+}
+
+.section-right-entry-content p {
+  margin-bottom: 3px;
+}
