@@ -4,52 +4,112 @@
   box-sizing: border-box;
 }
 
+:root {
+  --navy-900: #1b3a5c; /* Section header background and section header font color*/
+  --warm-100: #faf8f5; /* page background */
+  --warm-200: #f0ece5; /* card background */
+  --warm-300: #e8e6e2; /* section background */
+  --warm-border: #ddd5c7; /* border */
+  --ink-900: #2b2620; /* Main font color */
+
+  --color-bg-page: var(--warm-200);
+  --color-bg-card: var(--warm-100);
+  --color-bg-header: var(--navy-900);
+  --color-bg-section: var(--warm-300);
+  --color-bg-hover: #d1d1d1;
+
+  --color-text-body: var(--ink-900);
+  --color-text-header-dark: var(--navy-900);
+  --color-text-header-light: var(--warm-200);
+
+  --color-border: var(--warm-border);
+
+  --font-main: Arial, sans-serif;
+}
+
 body {
-    background: #d9d9d9;
-    padding: 40px;
-    font-family: Arial, sans-serif;
+  background: var(--color-bg-page);
+  font-family: var(--font-main);
 }
 
 main {
-    width: 210mm;
-    /* min-height: 300mm; */
-    margin: 0 auto;
-    background: white;
-    box-shadow: 0 0 20px rgba(0,0,0,.2);
+  width: 210mm;
+  margin: 0 auto;
+  background: var(--color-bg-card);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
 }
 
 /*******************************
   Header and Footer
 *******************************/
-header, footer {
-    width: 100%;
-    padding: 10px;
-    text-align: center;
-    background-color: #f1f1f1;
-}
-
 header {
-  color: #123E65;
+  width: 100%;
+  background-color: var(--color-bg-card);
+  /* position: sticky;
+  top: 0; */
+}
+footer {
+  width: 100%;
+  padding: 10px;
+  text-align: center;
+  background-color: var(--color-bg-card);
 }
 
 /*******************************
-  Grid
+  Navbar
+*******************************/
+nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  /* justify-content: right; */
+  justify-content: center;
+}
+
+nav ul li a {
+  display: block;
+  padding: 14px 16px;
+  /* border: 1px solid var(--color-border); */
+  text-decoration: none;
+  color: var(--color-text-header-dark);
+}
+nav ul li a:hover {
+  background-color: var(--color-bg-hover);
+}
+
+/*******************************
+  Container
 *******************************/
 .container {
-    display: grid;
-    grid-template-columns: 32% 68%;
+  margin: 20px 0 20px 0;
+}
+
+#project-name-container {
+  width: 100%;
+  padding: 10px;
+  text-align: center;
+  background-color: var(--color-bg-card);
+  color: var(--color-text-header-dark);
+}
+/*******************************
+  Grid
+*******************************/
+.grid-container {
+  display: grid;
+  grid-template-columns: 32% 68%;
 }
 
 /*******************************
   Left section
 *******************************/
 #section-left {
-    background-color: #f1f1f1;
+  background-color: var(--color-bg-section);
 }
 
 .section-left-header {
-  color: #123E65;
-  padding: 5px
+  color: var(--color-text-header-dark);
+  padding: 5px;
 }
 .section-left-entry-header {
   font-weight: bold;
@@ -64,25 +124,22 @@ header {
 /*******************************
   Right section
 *******************************/
-#section-right {
-}
-
 .section-right-header {
-  background-color: #123E65;
+  background-color: var(--color-bg-header);
   text-align: center;
-  color: white;
+  color: var(--color-text-header-light);
   padding: 5px;
   margin: 0px 0 5px 0;
 }
 
 .section-right-entry-header {
-  background-color: #f1f1f1;
+  background-color: var(--color-bg-section);
   padding: 3px;
 }
 
 .section-right-entry-content {
   padding: 5px;
-  background-color: white;
+  background-color: var(--color-bg-card);
   text-align: justify;
   text-justify: inter-word;
 }
@@ -93,4 +150,10 @@ header {
 
 .section-right-entry-content p {
   margin-bottom: 3px;
+}
+
+/*******************************
+  Visitor Counter
+*******************************/
+#visitor-counter-container {
 }
