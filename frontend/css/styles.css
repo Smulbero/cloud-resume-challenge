@@ -1,3 +1,13 @@
+@media (max-width: 850px) {
+  
+  main {
+    width: 100%;
+  }
+  .grid-container {
+    grid-template-columns: 1fr;
+  }
+}
+
 * {
   padding: 0;
   margin: 0;
@@ -8,15 +18,16 @@
   --navy-900: #1b3a5c; /* Section header background and section header font color*/
   --warm-100: #faf8f5; /* page background */
   --warm-200: #f0ece5; /* card background */
-  --warm-300: #e8e6e2; /* section background */
-  --warm-border: #ddd5c7; /* border */
-  --ink-900: #2b2620; /* Main font color */
+  --warm-300: #e8e6e2; /* section background */ 
+  --warm-400: #e0dcd3;
+  --warm-border: #ddd5c7; /* border color */
+  --ink-900: #2b2620; /* Main font color */  
 
   --color-bg-page: var(--warm-200);
   --color-bg-card: var(--warm-100);
   --color-bg-header: var(--navy-900);
   --color-bg-section: var(--warm-300);
-  --color-bg-hover: #d1d1d1;
+  --color-bg-hover: var(--warm-400);
 
   --color-text-body: var(--ink-900);
   --color-text-header-dark: var(--navy-900);
@@ -32,27 +43,29 @@ body {
   font-family: var(--font-main);
 }
 
+main, header, footer {
+  width: 100%;
+}
+
 main {
-  width: 210mm;
+  max-width: 210mm;
   margin: 0 auto;
   background: var(--color-bg-card);
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
 }
 
 /*******************************
   Header and Footer
 *******************************/
 header {
-  width: 100%;
-  background-color: var(--color-bg-card);
+  background-color: var(--color-bg-section);
   /* position: sticky;
   top: 0; */
 }
 footer {
-  width: 100%;
   padding: 10px;
   text-align: center;
-  background-color: var(--color-bg-card);
+  background-color: var(--color-bg-section);
 }
 
 /*******************************
@@ -129,7 +142,6 @@ nav ul li a:hover {
   text-align: center;
   color: var(--color-text-header-light);
   padding: 5px;
-  margin: 0px 0 5px 0;
 }
 
 .section-right-entry-header {
@@ -155,5 +167,5 @@ nav ul li a:hover {
 /*******************************
   Visitor Counter
 *******************************/
-#visitor-counter-container {
-}
+/* #visitor-counter-container {
+} */

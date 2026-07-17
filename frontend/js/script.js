@@ -36,7 +36,7 @@ async function getData(url){
 }
 
 if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initVisitorCounter())
+    document.addEventListener("DOMContentLoaded", initVisitorCounter)
 } else {
     initVisitorCounter()
 }
