@@ -19,9 +19,12 @@ first request after inactivity. It would also require self-managed connection/qu
 
 ## Consequences
 
-\+ Database costs are minimized, billed based on request-units consumed
-\+ No self-managed connection/query logic needed
-\+ Avoids the cold-start latency that Azure SQL serverless would introduce 
+**Positive**
+- Database costs are minimized, billed based on request-units consumed
+- No self-managed connection/query logic needed
+- Avoids the cold-start latency that Azure SQL serverless would introduce 
   for infrequent visitors
-\- Data model is quite simple, and if the project grows past the initial 
+
+**Negative**
+- Data model is quite simple, and if the project grows past the initial 
   goal post, refactoring might be needed

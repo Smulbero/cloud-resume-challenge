@@ -47,7 +47,10 @@ Notes on specific folders:
 
 ## Consequences
 
-\+ Each concern has a predictable location
-\+ CI/CD workflows can be scoped on specific folders
-\- If `docs/architecture` grows to include non-image content, its scope 
+**Positive**
+- Each concern has a predictable location
+- CI/CD workflows can be scoped on specific folders
+
+**Negative**
+- If `docs/architecture` grows to include non-image content, its scope 
   may need to be revisited

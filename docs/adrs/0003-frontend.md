@@ -22,8 +22,11 @@ Given the site will be a single page, the added complexity of a framework and bu
 
 ## Consequences
 
-\+ Deployment is a direct file sync to Blob Storage
-\+ CI/CD pipeline stays simpler
-\+ Fewer moving parts to debug while implementing cloud and CI/CD parts of the challenge
-\- No component-based structure which may affect future UI complexity needs
-\- If the site ever grows past the project needs, this decision may need to be revisited
+**Positive**
+- Deployment is a direct file sync to Blob Storage
+- CI/CD pipeline stays simpler
+- Fewer moving parts to debug while implementing cloud and CI/CD parts of the challenge
+
+**Negative**
+- No component-based structure which may affect future UI complexity needs
+- If the site ever grows past the project needs, this decision may need to be revisited
