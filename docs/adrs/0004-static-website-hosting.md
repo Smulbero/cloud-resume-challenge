@@ -18,7 +18,10 @@ While Azure Static Web Apps bundles many related concerns together, like built-i
 
 ## Consequences
 
-\+ Requires manually building CI/CD pipeline for deployment which meets the project's learning goals
-\+ Requires manually configuring DNS and HTTPS which meets the project's learning goals
-\- More setup effort and configuration required
-\- Setting up DNS and HTTPS requires additional service
+**Positive**
+- Requires manually building CI/CD pipeline for deployment which meets the project's learning goals
+- Requires manually configuring DNS and HTTPS which meets the project's learning goals
+
+**Negative**
+- More setup effort and configuration required
+- Setting up DNS and HTTPS requires additional service
