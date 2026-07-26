@@ -15,8 +15,8 @@ resource "azurerm_storage_account" "this" {
     each.value.name,
     random_integer.this[each.key].result
   )
-  resource_group_name      = var.resource_groups[each.key].name
-  location                 = var.resource_groups[each.key].location
+  resource_group_name      = var.resource_groups[each.value.resource_group_key].name
+  location                 = var.resource_groups[each.value.resource_group_key].location
   account_tier             = each.value.account_tier
   account_replication_type = each.value.account_replication_type
 

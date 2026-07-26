@@ -13,6 +13,7 @@ variable "resource_groups" {
 variable "storage_accounts" {
   type = map(object({
     # Required attributes
+    resource_group_key       = string
     name                     = string
     account_tier             = string
     account_replication_type = string
