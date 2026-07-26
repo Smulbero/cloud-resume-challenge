@@ -12,11 +12,9 @@ Azure Functions needs a secure way to access Azure Cosmos DB Table API to read a
 
 ## Decision
 
-Azure Cosmos DB Table API supports authentication via Managed Identity, using the `DefaultAzureCredential`[¹], rather than a connection string or account key. Azure Functions will interact with the database directly using its Managed Identity.
+Azure Cosmos DB Table API supports authentication via Managed Identity, using the `DefaultAzureCredential`, rather than a connection string or account key. Azure Functions will interact with the database directly using its Managed Identity.
 
 Azure Key Vault could be used to store a Cosmos DB connection string. The Function would still need its own Managed Identity to authenticate to Key Vault, then retrieve and use the connection string to authenticate to Cosmos DB afterwards. This adds an unnecessary extra hop and resource.
-
-[¹]: https://learn.microsoft.com/en-us/azure/cosmos-db/table/quickstart-python "Quickstart - Azure SDK for Python - Azure Cosmos DB for Table"
 
 ## Consequences
 
@@ -28,3 +26,7 @@ Azure Key Vault could be used to store a Cosmos DB connection string. The Functi
 **Negative**
 - Requires RBAC configuration in Terraform
 - If project grows past the initial goal post, and later needs to store secrets, Key Vault may still need to be introduced
+
+## References
+
+- [Authenticate Azure Functions](https://learn.microsoft.com/en-us/azure/cosmos-db/table/quickstart-python#authenticate-the-client)
