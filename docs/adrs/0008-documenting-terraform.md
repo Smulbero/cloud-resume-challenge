@@ -21,9 +21,11 @@ The project will use `terraform-docs` to automatically generate documentation fr
 **Positive**
 - Documentation stays accurate, since it's generated directly from the Terraform source rather than written and maintained by hand
 - Consistent format across all modules and root configurations
+- Can be integrated into CI/CD pipeline
 
 **Negative**
 - Only documents what Terraform itself exposes, e.g. variables, outputs, providers, resources
+- Extra CI/CD pipeline step
 
 ## References
 
