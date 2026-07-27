@@ -7,7 +7,18 @@ variable "general_tags" {
 }
 
 variable "resource_groups" {
+  type = map(object({
+    name     = string
+    location = string
+  }))
+  description = "Map of resource group objects name, and location"
+}
 
+variable "random_integer" {
+  type = object({
+    min = 1000
+    max = 9999
+  })
 }
 
 variable "storage_accounts" {
@@ -29,11 +40,10 @@ variable "storage_accounts" {
   }))
   description = "Map of storage account objects to deploy"
 
-  # Actual max length 24 but resource uses random integer length of 4
   validation {
     condition = alltrue([
       for resource in var.storage_accounts :
-      length(resource.name) >= 3 && length(resource.name) <= 20 && can(regex("^[a-z0-9]+$", resource.name))
+      length(resource.name) >= 3 && length(resource.name) <= 24 - lenght(var.random_integer.max) && can(regex("^[a-z0-9]+$", resource.name))
     ])
     error_message = "Storage Account name must be between 3 and 20 characters, all lowercased, and must not contain any special characters"
   }

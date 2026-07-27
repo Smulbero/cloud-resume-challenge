@@ -6,14 +6,14 @@ variable "general_tags" {
   }
 }
 
-variable "resource_type_prefix" {
+variable "resource_name_prefix" {
   type        = string
   description = "Prefix value for resource group name"
   default     = "rg"
 
   validation {
-    condition     = can(regex("^[a-z0-9]+$", var.resource_type_prefix))
-    error_message = "The resource group prefix must only contain lowercase alphanumeric characters (e.g. 'rg')"
+    condition     = can(regex("^[a-z0-9]+$", var.resource_name_prefix))
+    error_message = "The resource group name prefix must only contain lowercase alphanumeric characters (e.g. 'rg')"
   }
 }
 

@@ -2,8 +2,8 @@ resource "random_integer" "this" {
   for_each = var.storage_accounts
 
   # Required attributes
-  min = 1000
-  max = 9999
+  min = var.random_integer.min
+  max = var.random_integer.max
 }
 
 resource "azurerm_storage_account" "this" {

@@ -10,7 +10,7 @@ resource "azurerm_resource_group" "this" {
   # Required attributes
   name = format(
     "%s-%s",
-    var.resource_type_prefix,
+    var.resource_name_prefix,
     each.key
   )
   location = each.value.location
