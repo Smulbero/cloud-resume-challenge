@@ -54,7 +54,7 @@ variable "function_apps" {
 
     # Optional attributes
     identity = {
-      type = string
+      type = optional(string, "SystemAssigned")
       identity_ids = optional(list, [])
     }
     tags = optional(map(string), {})
@@ -70,8 +70,8 @@ variable "function_apps" {
 
   validation {
     condition = alltrue(
-      [ for resource in var.function_apps : resource.site_config.application_stack ?
-      contains(["3.14", "3.13", "3.12", "3.11", "3.10"], resource.site_config.application_stack.python_version) : null]
+      [ for resource in var.function_apps : resource.site_config.application_stack.python_version != null ?
+      contains(["3.14", "3.13", "3.12", "3.11", "3.10"], resource.site_config.application_stack.python_version) : true]
     )
     error_message = "Acceptable Python versions: '3.10', '3.11', '3.12', '3.13', and '3.14'"
   }

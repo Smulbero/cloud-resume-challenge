@@ -17,6 +17,10 @@ resource "azurerm_linux_function_app" "this" {
   }
 
   # Optional attributes
+  identity {
+    type = each.value.identity.type
+    identity_ids = each.value.identity.identity_ids
+  }
   tags = merge(
     var.general_tags,
     each.value.tags
