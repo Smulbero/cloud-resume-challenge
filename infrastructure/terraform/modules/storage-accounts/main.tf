@@ -24,7 +24,7 @@ resource "azurerm_storage_account" "this" {
   account_kind = each.value.account_kind
   access_tier = contains(
     ["BlobStorage", "FileStorage", "StorageV2"],
-    each.value.account_tier
+    each.value.account_kind
   ) ? each.value.access_tier : null
   tags = merge(
     var.general_tags,

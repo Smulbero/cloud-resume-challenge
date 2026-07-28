@@ -1,6 +1,7 @@
 variable "general_tags" {
   type        = map(string)
   description = "A mapping of global tags to assign to all resources"
+  
   default = {
     terraform = true
   }
@@ -16,9 +17,20 @@ variable "resource_groups" {
 
 variable "random_integer" {
   type = object({
+    min = number
+    max = number
+  })
+  description = "Min and Max values for random_integer resource"
+
+  default = {
     min = 1000
     max = 9999
-  })
+  }
+
+  validation {
+    condition = var.random_integer.min < var.random_integer.max
+    error_message = "Min value must be smaller than max value"
+  }
 }
 
 variable "storage_accounts" {
@@ -43,9 +55,9 @@ variable "storage_accounts" {
   validation {
     condition = alltrue([
       for resource in var.storage_accounts :
-      length(resource.name) >= 3 && length(resource.name) <= 24 - lenght(var.random_integer.max) && can(regex("^[a-z0-9]+$", resource.name))
+      length(resource.name) >= 3 && length(resource.name) <= 24 - length(tostring(var.random_integer.max)) && can(regex("^[a-z0-9]+$", resource.name))
     ])
-    error_message = "Storage Account name must be between 3 and 20 characters, all lowercased, and must not contain any special characters"
+    error_message = "Storage Account name must be between 3 and 24 (minus length of random_integer, default 4) characters, all lowercased, and must not contain any special characters"
   }
 
   validation {
