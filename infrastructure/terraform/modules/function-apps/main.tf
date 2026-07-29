@@ -1,4 +1,4 @@
-resource "azurerm_linux_function_app" "this" {
+resource "azurerm_function_app_flex_consumption" "this" {
   for_each = var.function_apps
 
   # Required attributes
@@ -7,20 +7,18 @@ resource "azurerm_linux_function_app" "this" {
     var.resource_name_prefix,
     each.value.name
   )
-  resource_group_name = var.resource_groups[each.value.resource_group_key].name
-  location = var.resource_groups[each.value.resource_group_key].location
-  service_plan_id = var.service_plans[each.value.service_plan_key].id
-  site_config {
-    application_stack {
-      python_version = each.value.site_config.application_stack.python_version
-    }
-  }
+  resource_group_name         = var.resource_groups[each.value.resource_group_key].name
+  location                    = var.resource_groups[each.value.resource_group_key].location
+  service_plan_id             = var.service_plans[each.value.service_plan_key].id
+  storage_container_type      = each.value.storage_container_type
+  storage_container_endpoint  = "${var.storage_accounts[each.value.storage_account_key].primary_blob_endpoint}${var.storage_containers[each.value.storage_account_key].name}"
+  storage_authentication_type = each.value.storage_authentication_type
+  runtime_name                = each.value.runtime_name
+  runtime_version             = each.value.runtime_version
+  site_config {}
 
   # Optional attributes
-  identity {
-    type = each.value.identity.type
-    identity_ids = each.value.identity.identity_ids
-  }
+  app_settings = each.value.app_settings
   tags = merge(
     var.general_tags,
     each.value.tags
