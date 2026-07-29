@@ -1,7 +1,7 @@
 variable "general_tags" {
   type        = map(string)
   description = "A mapping of global tags to assign to all resources"
-  
+
   default = {
     terraform = true
   }
@@ -28,7 +28,7 @@ variable "random_integer" {
   }
 
   validation {
-    condition = var.random_integer.min < var.random_integer.max
+    condition     = var.random_integer.min < var.random_integer.max
     error_message = "Min value must be smaller than max value"
   }
 }
@@ -49,6 +49,11 @@ variable "storage_accounts" {
       error_404_document = optional(string, "404.html")
     }))
     tags = optional(map(string), {})
+
+    container = optional(object({
+      name                  = optional(string, null)
+      container_access_type = optional(string, null)
+    }), null)
   }))
   description = "Map of storage account objects to deploy"
 

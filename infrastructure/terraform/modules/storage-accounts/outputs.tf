@@ -11,3 +11,9 @@ output "names" {
     for k, v in azurerm_storage_account.this : k => v.name
   }
 }
+
+output "storage_containers" {
+  type        = map(any)
+  description = "A map containing the full objects of the deployed storage containers"
+  value       = azurerm_storage_container.this
+}

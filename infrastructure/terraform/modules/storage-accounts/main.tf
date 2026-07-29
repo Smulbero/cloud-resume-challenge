@@ -45,3 +45,14 @@ resource "azurerm_storage_account_static_website" "this" {
   index_document     = each.value.index_document
   error_404_document = each.value.error_404_document
 }
+
+resource "azurerm_storage_container" "this" {
+  for_each = {
+    for k, v in var.storage_accounts : k => v.container
+    if v.container != null
+  }
+
+  name                  = each.value.name
+  storage_account_id    = azurerm_storage_account.this[each.key].id
+  container_access_type = each.value.container_access_type
+}
