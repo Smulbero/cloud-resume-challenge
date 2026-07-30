@@ -86,7 +86,7 @@ variable "function_apps" {
 
     # Optional attributes
     app_settings = optional(map(string), {})
-    tags = optional(map(string), {})
+    tags         = optional(map(string), {})
   }))
   description = "Map of function app objects to deploy"
 }
