@@ -33,6 +33,17 @@ variable "random_integer" {
   }
 }
 
+variable "resource_name_prefix" {
+  type        = string
+  description = "Prefix value for resource group name"
+  default     = "afd"
+
+  validation {
+    condition     = can(regex("^[a-z0-9]+$", var.resource_name_prefix))
+    error_message = "The front door name prefix must only contain lowercase alphanumeric characters (e.g. 'afd')"
+  }
+}
+
 variable "frontdoor_profiles" {
   type = map(object({
     # Required attributes
@@ -43,7 +54,7 @@ variable "frontdoor_profiles" {
     # Optional attributes
     identity = optional(object({
       type = string
-    }), {})
+    }), null)
     response_timeout_seconds = optional(number, 120)
     log_scrubbing_rules = optional(map(object({
       match_variable = string
@@ -61,7 +72,7 @@ variable "frontdoor_profiles" {
 
   validation {
     condition = alltrue(
-      [for k in var.frontdoor_profiles : k.identity ?
+      [for k in var.frontdoor_profiles : k.identity != null ?
         contains(["SystemAssigned", "UserAssigned", "SystemAssigned, UserAssigned"], k.identity.type) : true
       ]
     )
@@ -70,7 +81,7 @@ variable "frontdoor_profiles" {
 
   validation {
     condition = alltrue(
-      [for k in var.frontdoor_profiles : k.log_scrubbing_rules ?
+      [for k in var.frontdoor_profiles : k.log_scrubbing_rules != null ?
         alltrue(
           [for sub_key in k.log_scrubbing_rules : contains(["QueryStringArgNames", "RequestIPAddress", "RequestUri"], sub_key.match_variable)]
         ) : true
@@ -105,11 +116,11 @@ variable "frontdoor_origin_groups" {
     # Required attributes
     frontdoor_profile_key = string
     name                  = string
-    load_balancing = {
+    load_balancing = optional(object({
       additional_latency_in_milliseconds = optional(number, 50)
       sample_size                        = optional(number, 4)
       successful_samples_required        = optional(number, 3)
-    }
+    }), null)   
 
     # Optional attributes
     health_probe = optional(object({
@@ -144,7 +155,7 @@ variable "frontdoor_origin_groups" {
 
   validation {
     condition = alltrue(
-      [for k in var.frontdoor_origin_groups : k.health_probe ?
+      [for k in var.frontdoor_origin_groups : k.health_probe != null ?
       contains(["Http", "Https"], k.health_probe.protocol) : true]
     )
     error_message = "Acceptable values for health_probe blocks 'protocol' attribute are: 'Http', and 'Https'"
@@ -152,7 +163,7 @@ variable "frontdoor_origin_groups" {
 
   validation {
     condition = alltrue(
-      [for k in var.frontdoor_origin_groups : k.health_probe ?
+      [for k in var.frontdoor_origin_groups : k.health_probe != null ?
       k.health_probe.interval_in_seconds >= 1 && k.health_probe.interval_in_seconds <= 255 : true]
     )
     error_message = "Acceptable values for health_probe blocks 'interval_in_seconds' attribute are between 1 and 255"
@@ -160,7 +171,7 @@ variable "frontdoor_origin_groups" {
 
   validation {
     condition = alltrue(
-      [for k in var.frontdoor_origin_groups : k.health_probe ?
+      [for k in var.frontdoor_origin_groups : k.health_probe != null ?
       contains(["GET", "HEAD"], k.health_probe.request_type) : true]
     )
     error_message = "Acceptable values for health_probe blocks 'request_type' attribute are: 'GET', and 'HEAD'"
@@ -214,6 +225,33 @@ variable "frontdoor_origins" {
   }
 }
 
+variable "frontdoor_custom_domains" {
+  type = map(object({
+    name = string
+    frontdoor_profile_key = string
+    host_name = string
+    tls = optional(object({
+      certificate_type = optional(string, "ManagedCertificate")
+      minimum_version = optional(string, "TLS12")
+    }), null) 
+  }))
+  description = "Map of front door custom domains to deploy"
+
+  validation {
+    condition = alltrue(
+      [ for k in var.frontdoor_custom_domains : contains(["CustomerCertificate", "ManagedCertificate"], k.tls.certificate_type) ]
+    )
+    error_message = "Allowed values for tls blocks 'certificate_type' attribute: 'CustomerCertificate', and 'ManagedCertificate'"
+  }
+
+  validation {
+    condition = alltrue(
+      [ for k in var.frontdoor_custom_domains : contains("TLS12", k.tls.minimum_version) ]
+    )
+    error_message = "Allowed values for tls blocks 'minimum_version' attribute: 'TLS12'"
+  }
+}
+
 variable "frontdoor_routes" {
   type = map(object({
     # Required attributes
@@ -244,7 +282,7 @@ variable "frontdoor_routes" {
   validation {
     condition = alltrue(
       [for k in var.frontdoor_routes : k.https_redirect_enabled == true ?
-        k.supported_protocols == ["Http", "Https"] : true
+        k.supported_protocols == (["Http", "Https"] || ["Https", "Http"]) : true
       ]
     )
     error_message = "If 'https_redirect_enabled' attribute is set to 'true' the 'supported_protocols' attribute must contain both Http and Https values"
@@ -259,7 +297,7 @@ variable "frontdoor_routes" {
 
   validation {
     condition = alltrue(
-      [for k in var.frontdoor_routes : k.cache ?
+      [for k in var.frontdoor_routes : k.cache != null ?
       contains(["IgnoreQueryString", "IgnoreSpecifiedQueryStrings", "IncludeSpecifiedQueryStrings", "UseQueryString"], k.cache.query_string_caching_behavior) : true]
     )
     error_message = "Acceptable values for cache blocks 'query_string_caching_behavior' attribute: 'IgnoreQueryString', 'IgnoreSpecifiedQueryStrings', 'IncludeSpecifiedQueryStrings', and 'UseQueryString'"

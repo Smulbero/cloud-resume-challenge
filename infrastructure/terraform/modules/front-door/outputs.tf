@@ -22,6 +22,12 @@ output "frontdoor_origins" {
   value       = azurerm_cdn_frontdoor_origin.this
 }
 
+output "frontdoor_custom_domains" {
+  type        = map(any)
+  description = "A map containing the full objects of the deployed Azure Front Door custom domains"
+  value       = azurerm_cdn_frontdoor_custom_domain.this
+}
+
 output "frontdoor_routes" {
   type        = map(any)
   description = "A map containing the full objects of the deployed Azure Front Door routes"
