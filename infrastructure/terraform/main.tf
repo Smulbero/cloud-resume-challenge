@@ -39,3 +39,14 @@ module "function_apps" {
   function_apps      = var.function_apps
   general_tags       = local.general_tags
 }
+
+# ==================================================
+# Cosmos DBs
+# ==================================================
+module "cosmos_dbs" {
+  source             = "./modules/cosmos-dbs"
+  resource_groups    = module.resource_groups.resource_groups
+  cosmos_db_accounts = var.cosmos_db_accounts
+  cosmos_db_tables   = var.cosmos_db_tables
+  general_tags       = var.general_tags
+}

@@ -90,3 +90,42 @@ variable "function_apps" {
   }))
   description = "Map of function app objects to deploy"
 }
+
+# ==================================================
+# Cosmos DBs
+# ==================================================
+variable "cosmos_db_accounts" {
+  type = map(object({
+    # Required attributes
+    resource_group_key = string
+    name               = string
+    offer_type         = string
+    geo_locations = map(object({
+      failover_priority = number
+      location          = string
+      zone_redundant    = optional(bool, false)
+    }))
+    consistency_policy = object({
+      consistency_level       = string
+      max_interval_in_seconds = optional(number, 5)
+      max_staleness_prefix    = optional(number, 100)
+    })
+    capabilities = map(object({
+      name = string
+    }))
+
+    # Optional attributes
+    tags = optional(map(string), {})
+  }))
+  description = "Map of Cosmos DB Account objects to deploy"
+}
+
+variable "cosmos_db_tables" {
+  type = map(object({
+    resource_group_key   = string
+    cosmosdb_account_key = string
+    name                 = string
+    throughput           = optional(number, 400)
+  }))
+  description = "Map of Cosmos DB objects to deploy"
+}

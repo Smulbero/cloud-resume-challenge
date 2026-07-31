@@ -24,27 +24,30 @@ resource "azurerm_cosmosdb_account" "this" {
 
     content {
       # Required
-      failover_priority = each.value.failover_priority
-      location          = each.value.location
+      failover_priority = geo_location.value.failover_priority
+      location          = geo_location.value.location
       # Optional
-      zone_redundant = each.value.zone_redundant
+      zone_redundant = geo_location.value.zone_redundant
     }
   }
 
-  dynamic "consistency_policy" {
-    for_each = each.value.consistency_policies
+  consistency_policy {
+    # Required
+    consistency_level = each.value.consistency_policy.consistency_level
+    # Optional
+    max_interval_in_seconds = each.value.consistency_policy.max_interval_in_seconds
+    max_staleness_prefix    = each.value.consistency_policy.max_staleness_prefix
 
-    content {
-      # Required
-      consistency_level = each.value.consistency_level
-      # Optional
-
-      max_interval_in_seconds = each.value.max_interval_in_seconds
-      max_staleness_prefix    = each.value.max_staleness_prefix
-    }
   }
 
   # Optional attributes
+  dynamic "capabilities" {
+    for_each = each.value.capabilities
+
+    content {
+      name = capabilities.value.name
+    }
+  }
   tags = merge(
     var.general_tags,
     each.value.tags
@@ -52,15 +55,12 @@ resource "azurerm_cosmosdb_account" "this" {
 }
 
 resource "azurerm_cosmosdb_table" "this" {
-  for_each = {
-    for k, v in var.cosmos_dbs : k => v.table
-    if v.table != null
-  }
+  for_each = var.cosmos_db_tables
 
   # Required attributes
   name                = each.value.name
   resource_group_name = var.resource_groups[each.value.resource_group_key].name
-  account_name        = azurerm_cosmosdb_account.this[each.key].name
+  account_name        = azurerm_cosmosdb_account.this[each.value.cosmosdb_account_key].name
   # Optional attributes
   throughput = each.value.throughput
 }
