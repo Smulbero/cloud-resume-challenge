@@ -48,5 +48,20 @@ module "cosmos_dbs" {
   resource_groups    = module.resource_groups.resource_groups
   cosmos_db_accounts = var.cosmos_db_accounts
   cosmos_db_tables   = var.cosmos_db_tables
-  general_tags       = var.general_tags
+  general_tags       = local.general_tags
+}
+
+# ==================================================
+# Front Doors
+# ==================================================
+module "frontdoors" {
+  source = "./modules/front-door"
+  resource_groups = module.resource_groups.resource_groups
+  frontdoor_profiles = var.frontdoor_profiles
+  frontdoor_endpoints = var.frontdoor_endpoints
+  frontdoor_origin_groups = var.frontdoor_origin_groups
+  frontdoor_origins = var.frontdoor_origins
+  frontdoor_custom_domains = var.frontdoor_custom_domains
+  frontdoor_routes = var.frontdoor_routes
+  general_tags       = local.general_tags
 }

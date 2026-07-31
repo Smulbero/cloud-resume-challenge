@@ -129,3 +129,121 @@ variable "cosmos_db_tables" {
   }))
   description = "Map of Cosmos DB objects to deploy"
 }
+
+# ==================================================
+# Front Doors
+# ==================================================
+variable "frontdoor_profiles" {
+  type = map(object({
+    # Required attributes
+    resource_group_key = string
+    name               = string
+    sku_name           = string
+
+    # Optional attributes
+    identity = optional(object({
+      type = string
+    }), null)
+    response_timeout_seconds = optional(number, 120)
+    log_scrubbing_rules = optional(map(object({
+      match_variable = string
+    })), null)
+    tags = optional(map(string), {})
+  }))
+  description = "Map of front door profiles to deploy"
+}
+
+variable "frontdoor_endpoints" {
+  type = map(object({
+    # Required attributes
+    frontdoor_profile_key = string
+    name                  = string
+
+    # Optional attributes
+    enabled = optional(bool, true)
+    tags    = optional(map(string), {})
+  }))
+  description = "Map of front door endpoints to deploy"
+}
+
+variable "frontdoor_origin_groups" {
+  type = map(object({
+    # Required attributes
+    frontdoor_profile_key = string
+    name                  = string
+    load_balancing = optional(object({
+      additional_latency_in_milliseconds = optional(number, 50)
+      sample_size                        = optional(number, 4)
+      successful_samples_required        = optional(number, 3)
+    }), null)  
+
+    # Optional attributes
+    health_probe = optional(object({
+      protocol            = string
+      interval_in_seconds = number
+      request_type        = optional(string, "HEAD")
+      path                = optional(string, "/")
+    }), null)
+  }))
+  description = "Map of front door origin groups to deploy"
+}
+
+variable "frontdoor_origins" {
+  type = map(object({
+    # Required attributes
+    name                           = string
+    frontdoor_origin_group_key     = string
+    host_name                      = string
+    certificate_name_check_enabled = bool
+
+    # Optional attributes
+    enabled            = optional(bool, true)
+    http_port          = optional(number, 80)
+    https_port         = optional(number, 443)
+    origin_host_header = optional(string, null)
+    priority           = optional(number, 1)
+    weight             = optional(number, 500)
+  }))
+  description = "Map of front door origins to deploy"
+}
+
+variable "frontdoor_custom_domains" {
+  type = map(object({
+    name = string
+    frontdoor_profile_key = string
+    host_name = string
+    tls = optional(object({
+      certificate_type = optional(string, "ManagedCertificate")
+      minimum_version = optional(string, "TLS12")
+    }), null)
+  }))
+  description = "Map of front door custom domains to deploy"
+}
+
+variable "frontdoor_routes" {
+  type = map(object({
+    # Required attributes
+    name                       = string
+    frontdoor_endpoint_key     = string
+    frontdoor_origin_group_key = string
+    patterns_to_match          = list(string)
+    supported_protocols        = list(string)
+
+    # Optional attributes
+    frontdoor_origin_key        = optional(string, null)
+    frontdoor_custom_domain_key = optional(string, null)
+    frontdoor_origin_path_key   = optional(string, null)
+    frontdoor_rule_set_key      = optional(string, null)
+    enabled                     = optional(bool, true)
+    https_redirect_enabled      = optional(bool, true)
+    link_to_default_domain      = optional(bool, true)
+    forwarding_protocol         = optional(string, "MatchRequest")
+    cache = optional(object({
+      query_string_caching_behavior = optional(string, "IgnoreQueryString")
+      query_strings                 = optional(list, null)
+      compression_enabled           = optional(bool, false)
+      content_types_to_compress     = optional(list, null)
+    }), null)
+  }))
+  description = "Map of front door routes to deploy"
+}
