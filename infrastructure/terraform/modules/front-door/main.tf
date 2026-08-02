@@ -21,19 +21,23 @@ resource "azurerm_cdn_frontdoor_profile" "this" {
 
   # Optional attributes
   dynamic "identity" {
-    for_each = each.value.identity != null
+    for_each = each.value.identity != null ? [each.value.identity] : []
 
     content {
-      type = each.value.identity.type
+      # Required
+      type = identity.value.type
     }
   }
+
   dynamic "log_scrubbing_rule" {
-    for_each = each.value.log_scrubbing_rules != null
+    for_each = each.value.log_scrubbing_rules != null ? each.value.log_scrubbing_rules : {}
 
     content {
+      # Required
       match_variable = log_scrubbing_rule.value.match_variable
     }
   }
+
   response_timeout_seconds = each.value.response_timeout_seconds
   tags = merge(
     var.general_tags,
@@ -62,29 +66,24 @@ resource "azurerm_cdn_frontdoor_origin_group" "this" {
   # Required attributes
   name                     = each.value.name
   cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.this[each.value.frontdoor_profile_key].id
-  dynamic "load_balancing" {
-    for_each = each.value.load_balancing != null
-    
-    content {
-      # Optional
-      additional_latency_in_milliseconds = load_balancing.value.additional_latency_in_milliseconds
-      sample_size                        = load_balancing.value.sample_size
-      successful_samples_required        = load_balancing.value.successful_samples_required
-    }
+  load_balancing {
+    # Optional
+    additional_latency_in_milliseconds = each.value.load_balancing.additional_latency_in_milliseconds
+    sample_size                        = each.value.load_balancing.sample_size
+    successful_samples_required        = each.value.load_balancing.successful_samples_required
   }
 
   # Optional attributes
   dynamic "health_probe" {
-    for_each = each.value.health_probe != null
+    for_each = each.value.health_probe != null ? [each.value.health_probe] : []
 
     content {
       # Required
-      protocol            = health_probe.value.health_probe.protocol
-      interval_in_seconds = health_probe.value.health_probe.interval_in_seconds
+      protocol            = health_probe.value.protocol
+      interval_in_seconds = health_probe.value.interval_in_seconds
       # Optional
-      request_type = health_probe.value.health_probe.request_type
-      path         = health_probe.value.health_probe.path
-
+      request_type = health_probe.value.request_type
+      path         = health_probe.value.path
     }
   }
 }
@@ -93,16 +92,18 @@ resource "azurerm_cdn_frontdoor_origin" "this" {
   for_each = var.frontdoor_origins
 
   # Required attributes
-  name                           = each.value.name
-  cdn_frontdoor_origin_group_id  = azurerm_cdn_frontdoor_origin_group.this[each.value.frontdoor_origin_group_key].id
-  host_name                      = each.value.host_name
+  name                          = each.value.name
+  cdn_frontdoor_origin_group_id = azurerm_cdn_frontdoor_origin_group.this[each.value.frontdoor_origin_group_key].id
+  host_name                      = each.value.storage_account_key != null ? var.storage_accounts[each.value.storage_account_key].primary_web_host : each.value.host_name
   certificate_name_check_enabled = each.value.certificate_name_check_enabled
 
   # Optional attributes
   enabled            = each.value.enabled
   http_port          = each.value.http_port
   https_port         = each.value.https_port
-  origin_host_header = each.value.origin_host_header
+  origin_host_header = each.value.origin_host_header != null ? each.value.origin_host_header : (
+    each.value.storage_account_key != null ? var.storage_accounts[each.value.storage_account_key].primary_web_host : each.value.host_name
+  )
   priority           = each.value.priority
   weight             = each.value.weight
 }
@@ -111,17 +112,14 @@ resource "azurerm_cdn_frontdoor_custom_domain" "this" {
   for_each = var.frontdoor_custom_domains
 
   # Required attributes
-  name = each.value.name
+  name                     = each.value.name
   cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.this[each.value.frontdoor_profile_key].id
-  host_name = each.value.host_name
-  dynamic "tls" {
-    for_each = each.value.tls != null
+  host_name                = each.value.host_name
 
-    content {
-      # Optional
-      certificate_type = each.value.tls.certificate_type
-      minimum_version = each.value.tls.minimum_version
-    }
+  tls {
+    # Optional
+    certificate_type = each.value.tls.certificate_type
+    minimum_version  = each.value.tls.minimum_version
   }
 }
 
@@ -136,24 +134,17 @@ resource "azurerm_cdn_frontdoor_route" "this" {
   supported_protocols           = each.value.supported_protocols
 
   # Optional attributes
-  cdn_frontdoor_origin_ids        = each.value.frontdoor_origin_key != null ? [azurerm_cdn_frontdoor_origin.this[each.value.frontdoor_origin_key]] : null
+  cdn_frontdoor_origin_ids        = each.value.frontdoor_origin_key != null ? [azurerm_cdn_frontdoor_origin.this[each.value.frontdoor_origin_key].id] : null
   cdn_frontdoor_custom_domain_ids = each.value.frontdoor_custom_domain_key != null ? [azurerm_cdn_frontdoor_custom_domain.this[each.value.frontdoor_custom_domain_key].id] : null
-  # cdn_frontdoor_origin_path = [placeholder, not sure if can be used]
-  # cdn_frontdoor_rule_set_ids = [placeholder, not sure if can be used]
-  enabled                = each.value.enabled
-  https_redirect_enabled = each.value.https_redirect_enabled
-  link_to_default_domain = each.value.link_to_default_domain
-  forwarding_protocol    = each.value.forwarding_protocol
-  dynamic "cache" {
-    for_each = each.value.cache != null
-
-    content {
-      # Optional
-      query_string_caching_behavior = each.value.cache.query_string_caching_behavior
-      query_strings                 = each.value.cache.query_strings
-      compression_enabled           = each.value.cache.compression_enabled
-      content_types_to_compress     = each.value.cache.content_types_to_compress
-
-    }
+  enabled                         = each.value.enabled
+  https_redirect_enabled          = each.value.https_redirect_enabled
+  link_to_default_domain          = each.value.link_to_default_domain
+  forwarding_protocol             = each.value.forwarding_protocol
+  cache {
+    # Optional
+    query_string_caching_behavior = each.value.cache != null ? each.value.cache.query_string_caching_behavior : "IgnoreQueryString"
+    query_strings                 = each.value.cache != null ? each.value.cache.query_strings : null
+    compression_enabled           = each.value.cache != null ? each.value.cache.compression_enabled : null
+    content_types_to_compress     = each.value.cache != null ? each.value.cache.content_types_to_compress : null
   }
 }

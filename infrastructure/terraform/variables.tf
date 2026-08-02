@@ -142,7 +142,7 @@ variable "frontdoor_profiles" {
 
     # Optional attributes
     identity = optional(object({
-      type = string
+      type = optional(string, "SystemAssigned")
     }), null)
     response_timeout_seconds = optional(number, 120)
     log_scrubbing_rules = optional(map(object({
@@ -171,11 +171,11 @@ variable "frontdoor_origin_groups" {
     # Required attributes
     frontdoor_profile_key = string
     name                  = string
-    load_balancing = optional(object({
+    load_balancing = object({
       additional_latency_in_milliseconds = optional(number, 50)
       sample_size                        = optional(number, 4)
       successful_samples_required        = optional(number, 3)
-    }), null)  
+    })
 
     # Optional attributes
     health_probe = optional(object({
@@ -193,7 +193,8 @@ variable "frontdoor_origins" {
     # Required attributes
     name                           = string
     frontdoor_origin_group_key     = string
-    host_name                      = string
+    storage_account_key            = optional(string)
+    host_name                      = optional(string)
     certificate_name_check_enabled = bool
 
     # Optional attributes
@@ -201,21 +202,21 @@ variable "frontdoor_origins" {
     http_port          = optional(number, 80)
     https_port         = optional(number, 443)
     origin_host_header = optional(string, null)
-    priority           = optional(number, 1)
-    weight             = optional(number, 500)
+    priority           = optional(number, 1)   # 1-5
+    weight             = optional(number, 500) # 1-1000
   }))
   description = "Map of front door origins to deploy"
 }
 
 variable "frontdoor_custom_domains" {
   type = map(object({
-    name = string
+    name                  = string
     frontdoor_profile_key = string
-    host_name = string
-    tls = optional(object({
+    host_name             = string
+    tls = object({
       certificate_type = optional(string, "ManagedCertificate")
-      minimum_version = optional(string, "TLS12")
-    }), null)
+      minimum_version  = optional(string, "TLS12")
+    })
   }))
   description = "Map of front door custom domains to deploy"
 }
@@ -240,9 +241,9 @@ variable "frontdoor_routes" {
     forwarding_protocol         = optional(string, "MatchRequest")
     cache = optional(object({
       query_string_caching_behavior = optional(string, "IgnoreQueryString")
-      query_strings                 = optional(list, null)
+      query_strings                 = optional(list(string), null)
       compression_enabled           = optional(bool, false)
-      content_types_to_compress     = optional(list, null)
+      content_types_to_compress     = optional(list(string), null)
     }), null)
   }))
   description = "Map of front door routes to deploy"

@@ -15,6 +15,14 @@ variable "resource_groups" {
   description = "Map of resource group objects name, and location"
 }
 
+variable "storage_accounts" {
+  type = map(object({
+    name             = string
+    primary_web_host = string
+  }))
+  description = "Map of storage account objects name, and primary_web_host"
+}
+
 variable "random_integer" {
   type = object({
     min = number
@@ -53,7 +61,7 @@ variable "frontdoor_profiles" {
 
     # Optional attributes
     identity = optional(object({
-      type = string
+      type = optional(string, "SystemAssigned")
     }), null)
     response_timeout_seconds = optional(number, 120)
     log_scrubbing_rules = optional(map(object({
@@ -64,36 +72,39 @@ variable "frontdoor_profiles" {
   description = "Map of front door profiles to deploy"
 
   validation {
-    condition = alltrue(
-      [for k in var.frontdoor_profiles : contains(["Standard_AzureFrontDoor", "Premium_AzureFrontDoor"], k.sku_name)]
-    )
+    condition = alltrue([
+      for k in var.frontdoor_profiles :
+      contains(["Standard_AzureFrontDoor", "Premium_AzureFrontDoor"], k.sku_name)
+    ])
     error_message = "Acceptable values for Azure Front Door SKUs: 'Standard_AzureFrontDoor', and 'Premium_AzureFrontDoor'"
   }
 
   validation {
-    condition = alltrue(
-      [for k in var.frontdoor_profiles : k.identity != null ?
-        contains(["SystemAssigned", "UserAssigned", "SystemAssigned, UserAssigned"], k.identity.type) : true
-      ]
-    )
+    condition = alltrue([
+      for k in var.frontdoor_profiles :
+      k.identity != null ?
+      contains(["SystemAssigned", "UserAssigned", "SystemAssigned, UserAssigned"], k.identity.type) : true
+    ])
     error_message = "Acceptable values for identity blocks 'type' attribute: 'SystemAssigned', 'UserAssigned', or 'SystemAssigned, UserAssigned'"
   }
 
   validation {
-    condition = alltrue(
-      [for k in var.frontdoor_profiles : k.log_scrubbing_rules != null ?
-        alltrue(
-          [for sub_key in k.log_scrubbing_rules : contains(["QueryStringArgNames", "RequestIPAddress", "RequestUri"], sub_key.match_variable)]
-        ) : true
-      ]
-    )
+    condition = alltrue([
+      for k in var.frontdoor_profiles :
+      k.log_scrubbing_rules != null ?
+      alltrue([
+        for subk in k.log_scrubbing_rules :
+        contains(["QueryStringArgNames", "RequestIPAddress", "RequestUri"], subk.match_variable)
+      ]) : true
+    ])
     error_message = "Acceptable values for log scrubbing rule blocks 'match_variable' attribute: 'QueryStringArgNames', 'RequestIPAddress', and 'RequestUri'"
   }
 
   validation {
-    condition = alltrue(
-      [for k in var.frontdoor_profiles : k.response_timeout_seconds >= 16 && k.response_timeout_seconds <= 240]
-    )
+    condition = alltrue([
+      for k in var.frontdoor_profiles :
+      k.response_timeout_seconds >= 16 && k.response_timeout_seconds <= 240
+    ])
     error_message = "Acceptable values for 'response_timeout_seconds' attribute are between 16 and 240"
   }
 }
@@ -116,11 +127,11 @@ variable "frontdoor_origin_groups" {
     # Required attributes
     frontdoor_profile_key = string
     name                  = string
-    load_balancing = optional(object({
+    load_balancing = object({
       additional_latency_in_milliseconds = optional(number, 50)
       sample_size                        = optional(number, 4)
       successful_samples_required        = optional(number, 3)
-    }), null)   
+    })
 
     # Optional attributes
     health_probe = optional(object({
@@ -133,47 +144,53 @@ variable "frontdoor_origin_groups" {
   description = "Map of front door origin groups to deploy"
 
   validation {
-    condition = alltrue(
-      [for k in var.frontdoor_origin_groups : k.load_balancing.additional_latency_in_milliseconds >= 0 && k.load_balancing.additional_latency_in_milliseconds <= 1000]
-    )
+    condition = alltrue([
+      for k in var.frontdoor_origin_groups :
+      (k.load_balancing.additional_latency_in_milliseconds >= 0 && k.load_balancing.additional_latency_in_milliseconds <= 1000)
+    ])
     error_message = "Acceptable values for load_balancing blocks 'additional_latency_in_milliseconds' attribute are between 0 and 1000"
   }
 
   validation {
-    condition = alltrue(
-      [for k in var.frontdoor_origin_groups : k.load_balancing.sample_size >= 0 && k.load_balancing.sample_size <= 255]
-    )
+    condition = alltrue([
+      for k in var.frontdoor_origin_groups :
+      k.load_balancing.sample_size >= 0 && k.load_balancing.sample_size <= 255
+    ])
     error_message = "Acceptable values for load_balancing blocks 'sample_size' attribute are between 0 and 255"
   }
 
   validation {
-    condition = alltrue(
-      [for k in var.frontdoor_origin_groups : k.load_balancing.successful_samples_required >= 0 && k.load_balancing.successful_samples_required <= 255]
-    )
+    condition = alltrue([
+      for k in var.frontdoor_origin_groups :
+      k.load_balancing.successful_samples_required >= 0 && k.load_balancing.successful_samples_required <= 255
+    ])
     error_message = "Acceptable values for load_balancing blocks 'successful_samples_required' attribute are between 0 and 255"
   }
 
   validation {
-    condition = alltrue(
-      [for k in var.frontdoor_origin_groups : k.health_probe != null ?
-      contains(["Http", "Https"], k.health_probe.protocol) : true]
-    )
+    condition = alltrue([
+      for k in var.frontdoor_origin_groups :
+      k.health_probe != null ?
+      contains(["Http", "Https"], k.health_probe.protocol) : true
+    ])
     error_message = "Acceptable values for health_probe blocks 'protocol' attribute are: 'Http', and 'Https'"
   }
 
   validation {
-    condition = alltrue(
-      [for k in var.frontdoor_origin_groups : k.health_probe != null ?
-      k.health_probe.interval_in_seconds >= 1 && k.health_probe.interval_in_seconds <= 255 : true]
-    )
+    condition = alltrue([
+      for k in var.frontdoor_origin_groups :
+      k.health_probe != null ?
+      k.health_probe.interval_in_seconds >= 1 && k.health_probe.interval_in_seconds <= 255 : true
+    ])
     error_message = "Acceptable values for health_probe blocks 'interval_in_seconds' attribute are between 1 and 255"
   }
 
   validation {
-    condition = alltrue(
-      [for k in var.frontdoor_origin_groups : k.health_probe != null ?
-      contains(["GET", "HEAD"], k.health_probe.request_type) : true]
-    )
+    condition = alltrue([
+      for k in var.frontdoor_origin_groups :
+      k.health_probe != null ?
+      contains(["GET", "HEAD"], k.health_probe.request_type) : true
+    ])
     error_message = "Acceptable values for health_probe blocks 'request_type' attribute are: 'GET', and 'HEAD'"
   }
 }
@@ -183,7 +200,8 @@ variable "frontdoor_origins" {
     # Required attributes
     name                           = string
     frontdoor_origin_group_key     = string
-    host_name                      = string
+    storage_account_key            = optional(string)
+    host_name                      = optional(string)
     certificate_name_check_enabled = bool
 
     # Optional attributes
@@ -197,57 +215,72 @@ variable "frontdoor_origins" {
   description = "Map of front door origins to deploy"
 
   validation {
-    condition = alltrue(
-      [for k in var.frontdoor_origins : k.http_port >= 1 && k.http_port <= 65535]
-    )
+    condition = alltrue([
+      for k in var.frontdoor_origins :
+      (k.host_name != null && k.storage_account_key == null) ||
+      (k.host_name == null && k.storage_account_key != null)
+    ])
+    error_message = "Either one of 'host_name' or 'storage_account_key' attributes must be set for each origin"
+  }
+
+  validation {
+    condition = alltrue([
+      for k in var.frontdoor_origins :
+      k.http_port >= 1 && k.http_port <= 65535
+    ])
     error_message = "Acceptable values for 'http_port' attribute are between 1 and 65535"
   }
 
   validation {
-    condition = alltrue(
-      [for k in var.frontdoor_origins : k.https_port >= 1 && k.https_port <= 65535]
-    )
+    condition = alltrue([
+      for k in var.frontdoor_origins :
+      k.https_port >= 1 && k.https_port <= 65535
+    ])
     error_message = "Acceptable values for 'https_port' attribute are between 1 and 65535"
   }
 
   validation {
-    condition = alltrue(
-      [for k in var.frontdoor_origins : k.priority >= 1 && k.priority <= 5]
-    )
+    condition = alltrue([
+      for k in var.frontdoor_origins :
+      k.priority >= 1 && k.priority <= 5
+    ])
     error_message = "Acceptable values for 'priority' attribute are between 1 and 5"
   }
 
   validation {
-    condition = alltrue(
-      [for k in var.frontdoor_origins : k.weight >= 1 && k.weight <= 1000]
-    )
+    condition = alltrue([
+      for k in var.frontdoor_origins :
+      k.weight >= 1 && k.weight <= 1000
+    ])
     error_message = "Acceptable values for 'weight' attribute are between 1 and 1000"
   }
 }
 
 variable "frontdoor_custom_domains" {
   type = map(object({
-    name = string
+    name                  = string
     frontdoor_profile_key = string
-    host_name = string
-    tls = optional(object({
+    host_name             = string
+    tls = object({
       certificate_type = optional(string, "ManagedCertificate")
-      minimum_version = optional(string, "TLS12")
-    }), null) 
+      minimum_version  = optional(string, "TLS12")
+    })
   }))
   description = "Map of front door custom domains to deploy"
 
   validation {
-    condition = alltrue(
-      [ for k in var.frontdoor_custom_domains : contains(["CustomerCertificate", "ManagedCertificate"], k.tls.certificate_type) ]
-    )
+    condition = alltrue([
+      for k in var.frontdoor_custom_domains :
+      contains(["CustomerCertificate", "ManagedCertificate"], k.tls.certificate_type)
+    ])
     error_message = "Allowed values for tls blocks 'certificate_type' attribute: 'CustomerCertificate', and 'ManagedCertificate'"
   }
 
   validation {
-    condition = alltrue(
-      [ for k in var.frontdoor_custom_domains : contains("TLS12", k.tls.minimum_version) ]
-    )
+    condition = alltrue([
+      for k in var.frontdoor_custom_domains :
+      contains(["TLS12"], k.tls.minimum_version)
+    ])
     error_message = "Allowed values for tls blocks 'minimum_version' attribute: 'TLS12'"
   }
 }
@@ -272,34 +305,36 @@ variable "frontdoor_routes" {
     forwarding_protocol         = optional(string, "MatchRequest")
     cache = optional(object({
       query_string_caching_behavior = optional(string, "IgnoreQueryString")
-      query_strings                 = optional(list, null)
+      query_strings                 = optional(list(string), null)
       compression_enabled           = optional(bool, false)
-      content_types_to_compress     = optional(list, null)
+      content_types_to_compress     = optional(list(string), null)
     }), null)
   }))
   description = "Map of front door routes to deploy"
 
   validation {
-    condition = alltrue(
-      [for k in var.frontdoor_routes : k.https_redirect_enabled == true ?
-        k.supported_protocols == (["Http", "Https"] || ["Https", "Http"]) : true
-      ]
-    )
+    condition = alltrue([
+      for k in var.frontdoor_routes :
+      k.https_redirect_enabled == true ?
+      (contains(k.supported_protocols, "Http") && contains(k.supported_protocols, "Https")) : true
+    ])
     error_message = "If 'https_redirect_enabled' attribute is set to 'true' the 'supported_protocols' attribute must contain both Http and Https values"
   }
 
   validation {
-    condition = alltrue(
-      [for k in var.frontdoor_routes : contains(["HttpOnly", "HttpsOnly", "MatchRequest"], k.forwarding_protocol)]
-    )
+    condition = alltrue([
+      for k in var.frontdoor_routes :
+      contains(["HttpOnly", "HttpsOnly", "MatchRequest"], k.forwarding_protocol)
+    ])
     error_message = "Acceptable values for 'forwarding_protocol' attribute: 'HttpOnly', 'HttpsOnly', and 'MatchRequest'"
   }
 
   validation {
-    condition = alltrue(
-      [for k in var.frontdoor_routes : k.cache != null ?
-      contains(["IgnoreQueryString", "IgnoreSpecifiedQueryStrings", "IncludeSpecifiedQueryStrings", "UseQueryString"], k.cache.query_string_caching_behavior) : true]
-    )
+    condition = alltrue([
+      for k in var.frontdoor_routes :
+      k.cache != null ?
+      contains(["IgnoreQueryString", "IgnoreSpecifiedQueryStrings", "IncludeSpecifiedQueryStrings", "UseQueryString"], k.cache.query_string_caching_behavior) : true
+    ])
     error_message = "Acceptable values for cache blocks 'query_string_caching_behavior' attribute: 'IgnoreQueryString', 'IgnoreSpecifiedQueryStrings', 'IncludeSpecifiedQueryStrings', and 'UseQueryString'"
   }
 }

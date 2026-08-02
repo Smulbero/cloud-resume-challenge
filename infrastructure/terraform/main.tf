@@ -55,13 +55,14 @@ module "cosmos_dbs" {
 # Front Doors
 # ==================================================
 module "frontdoors" {
-  source = "./modules/front-door"
-  resource_groups = module.resource_groups.resource_groups
-  frontdoor_profiles = var.frontdoor_profiles
-  frontdoor_endpoints = var.frontdoor_endpoints
-  frontdoor_origin_groups = var.frontdoor_origin_groups
-  frontdoor_origins = var.frontdoor_origins
+  source                   = "./modules/front-door"
+  resource_groups          = module.resource_groups.resource_groups
+  storage_accounts         = module.storage_accounts.storage_accounts
+  frontdoor_profiles       = var.frontdoor_profiles
+  frontdoor_endpoints      = var.frontdoor_endpoints
+  frontdoor_origin_groups  = var.frontdoor_origin_groups
+  frontdoor_origins        = var.frontdoor_origins
   frontdoor_custom_domains = var.frontdoor_custom_domains
-  frontdoor_routes = var.frontdoor_routes
-  general_tags       = local.general_tags
+  frontdoor_routes         = var.frontdoor_routes
+  general_tags             = local.general_tags
 }

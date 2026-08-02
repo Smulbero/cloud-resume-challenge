@@ -33,3 +33,15 @@ output "frontdoor_routes" {
   description = "A map containing the full objects of the deployed Azure Front Door routes"
   value       = azurerm_cdn_frontdoor_route.this
 }
+
+output "frontdoor_custom_domain_validation_tokens" {
+  value = {
+    for k, v in azurerm_cdn_frontdoor_custom_domain.this : k => v.validation_token
+  }
+}
+
+output "frontdoor_endpoint_hostnames" {
+  value = {
+    for k, v in azurerm_cdn_frontdoor_endpoint.this : k => v.host_name
+  }
+}
