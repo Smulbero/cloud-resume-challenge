@@ -12,7 +12,7 @@ variable "resource_groups" {
     name     = string
     location = string
   }))
-  description = "Map of resource group objects name, and location"
+  description = "Map of k group objects name, and location"
 }
 
 variable "random_integer" {
@@ -20,7 +20,7 @@ variable "random_integer" {
     min = number
     max = number
   })
-  description = "Min and Max values for random_integer resource"
+  description = "Min and Max values for random_integer k"
 
   default = {
     min = 1000
@@ -60,14 +60,51 @@ variable "cosmos_db_accounts" {
 
   validation {
     condition = alltrue([
-      for resource in var.cosmos_db_accounts :
-      resource.consistency_policy.consistency_level == "BoundedStaleness" ||
+      for k in var.cosmos_db_accounts :
+      k.offer_type == "Standard"
+    ])
+    error_message = "'offer_type' attribute can be set only to 'Standard' currently"
+  }
+
+  validation {
+    condition = alltrue([
+      for k in var.cosmos_db_accounts :
+      k.consistency_policy.consistency_level == "BoundedStaleness" ||
       (
-        resource.consistency_policy.max_interval_in_seconds == 5 &&
-        resource.consistency_policy.max_staleness_prefix == 100
+        k.consistency_policy.max_interval_in_seconds == 5 &&
+        k.consistency_policy.max_staleness_prefix == 100
       )
     ])
-    error_message = "max_interval_in_seconds and max_staleness_prefix can only be set to values other than default when the consistency_level is set to BoundedStaleness"
+    error_message = "'max_interval_in_seconds' and 'max_staleness_prefix' can only be set to values other than default when the 'consistency_level' is set to 'BoundedStaleness'"
+  }
+
+  validation {
+    condition = alltrue([
+      for k in var.cosmos_db_accounts :
+      k.consistency_policy.max_interval_in_seconds >= 5 && k.consistency_policy.max_interval_in_seconds <= 86400
+    ])
+    error_message = "Acceptable values for consistency_policy blocks 'max_interval_in_seconds' attribute are between '5' and '86400'"
+  }
+
+  validation {
+    condition = alltrue([
+      for k in var.cosmos_db_accounts :
+      k.consistency_policy.max_staleness_prefix >= 10 && k.consistency_policy.max_staleness_prefix <= 2147483647
+    ])
+    error_message = "Acceptable values for consistency_policy blocks 'max_staleness_prefix' attribute are between '10' and '2147483647'"
+  }
+
+  validation {
+    condition = alltrue([
+      for k in var.cosmos_db_accounts :
+      k.capabilities != null ?
+      alltrue([
+        for subk in k.capabilities :
+        contains(["AllowSelfServeUpgradeToMongo36", "DeleteAllItemsByPartitionKey", "DisableRateLimitingResponses", "EnableAggregationPipeline", "EnableCassandra", "EnableFabricNetworkAclBypass", "EnableGremlin", "EnableMongo", "EnableMongo16MBDocumentSupport", "EnableMongoRetryableWrites", "EnableMongoRoleBasedAccessControl", "EnableNoSQLVectorSearch", "EnableNoSQLFullTextSearch", "EnablePartialUniqueIndex", "EnableServerless", "EnableTable", "EnableTtlOnCustomPath", "EnableUniqueCompoundNestedDocs", "MongoDBv3.4", "mongoEnableDocLevelTTL"], subk.name)
+      ]) :
+      true
+    ])
+    error_message = "Acceptable values for capabilities block 'name' attribute: 'AllowSelfServeUpgradeToMongo36', 'DeleteAllItemsByPartitionKey', 'DisableRateLimitingResponses', 'EnableAggregationPipeline', 'EnableCassandra', 'EnableFabricNetworkAclBypass', 'EnableGremlin', 'EnableMongo', 'EnableMongo16MBDocumentSupport', 'EnableMongoRetryableWrites', 'EnableMongoRoleBasedAccessControl', 'EnableNoSQLVectorSearch', 'EnableNoSQLFullTextSearch', 'EnablePartialUniqueIndex', 'EnableServerless', 'EnableTable', 'EnableTtlOnCustomPath', 'EnableUniqueCompoundNestedDocs', 'MongoDBv3.4', and 'mongoEnableDocLevelTTL'"
   }
 }
 
@@ -81,15 +118,18 @@ variable "cosmos_db_tables" {
   description = "Map of Cosmos DB objects to deploy"
 
   validation {
-    condition = alltrue(
-      [for resource in var.cosmos_db_tables : resource.throughput >= 400 && resource.throughput <= 1000000]
-    )
+    condition = alltrue([
+      for k in var.cosmos_db_tables :
+      k.throughput >= 400 && k.throughput <= 1000000
+    ])
     error_message = "Cosmos db manual throughput should be equal to or greater than 400 and less than or equal to 1000000."
   }
+
   validation {
-    condition = alltrue(
-      [for resource in var.cosmos_db_tables : resource.throughput % 100 == 0]
-    )
+    condition = alltrue([
+      for k in var.cosmos_db_tables :
+      k.throughput % 100 == 0
+    ])
     error_message = "Cosmos db throughput should be in increments of 100."
   }
 }

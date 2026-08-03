@@ -38,18 +38,25 @@ variable "storage_accounts" {
     # Optional attributes
     account_kind = optional(string, "Storage")
     access_tier  = optional(string, "Hot")
-    static_website = optional(object({
-      index_document     = optional(string, "index.html")
-      error_404_document = optional(string, "404.html")
-    }))
-    tags = optional(map(string), {})
-
-    container = optional(object({
-      name                  = optional(string, null)
-      container_access_type = optional(string, null)
-    }), null)
+    tags         = optional(map(string), {})
   }))
   description = "Map of storage account objects to deploy"
+}
+
+variable "storage_account_static_websites" {
+  type = map(object({
+    storage_account_key = string
+    index_document      = optional(string, "index.html")
+    error_404_document  = optional(string, "404.html")
+  }))
+}
+
+variable "storage_account_containers" {
+  type = map(object({
+    storage_account_key   = string
+    name                  = string
+    container_access_type = string
+  }))
 }
 
 # ==================================================

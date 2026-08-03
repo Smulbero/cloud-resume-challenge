@@ -92,20 +92,20 @@ resource "azurerm_cdn_frontdoor_origin" "this" {
   for_each = var.frontdoor_origins
 
   # Required attributes
-  name                          = each.value.name
-  cdn_frontdoor_origin_group_id = azurerm_cdn_frontdoor_origin_group.this[each.value.frontdoor_origin_group_key].id
+  name                           = each.value.name
+  cdn_frontdoor_origin_group_id  = azurerm_cdn_frontdoor_origin_group.this[each.value.frontdoor_origin_group_key].id
   host_name                      = each.value.storage_account_key != null ? var.storage_accounts[each.value.storage_account_key].primary_web_host : each.value.host_name
   certificate_name_check_enabled = each.value.certificate_name_check_enabled
 
   # Optional attributes
-  enabled            = each.value.enabled
-  http_port          = each.value.http_port
-  https_port         = each.value.https_port
+  enabled    = each.value.enabled
+  http_port  = each.value.http_port
+  https_port = each.value.https_port
   origin_host_header = each.value.origin_host_header != null ? each.value.origin_host_header : (
     each.value.storage_account_key != null ? var.storage_accounts[each.value.storage_account_key].primary_web_host : each.value.host_name
   )
-  priority           = each.value.priority
-  weight             = each.value.weight
+  priority = each.value.priority
+  weight   = each.value.weight
 }
 
 resource "azurerm_cdn_frontdoor_custom_domain" "this" {

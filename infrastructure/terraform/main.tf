@@ -11,10 +11,12 @@ module "resource_groups" {
 # Storage Accounts
 # ==================================================
 module "storage_accounts" {
-  source           = "./modules/storage-accounts"
-  resource_groups  = module.resource_groups.resource_groups
-  storage_accounts = var.storage_accounts
-  general_tags     = local.general_tags
+  source                          = "./modules/storage-accounts"
+  resource_groups                 = module.resource_groups.resource_groups
+  storage_accounts                = var.storage_accounts
+  storage_account_static_websites = var.storage_account_static_websites
+  storage_account_containers      = var.storage_account_containers
+  general_tags                    = local.general_tags
 }
 
 # ==================================================

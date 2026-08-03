@@ -9,3 +9,11 @@ output "cosmos_db_tables" {
   description = "A map containing the full objects of the deployed cosmos db tables"
   value       = azurerm_cosmosdb_table.this
 }
+
+output "cosmos_db_account_endpoints" {
+  type        = map(any)
+  description = "A cosmos db account endpoints"
+  value = {
+    for k, v in azurerm_cosmosdb_account.this : k => v.endpoint
+  }
+}

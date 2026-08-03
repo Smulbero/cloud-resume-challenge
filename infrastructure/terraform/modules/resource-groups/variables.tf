@@ -8,12 +8,12 @@ variable "general_tags" {
 
 variable "resource_name_prefix" {
   type        = string
-  description = "Prefix value for resource group name"
+  description = "Prefix value for k group name"
   default     = "rg"
 
   validation {
     condition     = can(regex("^[a-z0-9]+$", var.resource_name_prefix))
-    error_message = "The resource group name prefix must only contain lowercase alphanumeric characters (e.g. 'rg')"
+    error_message = "The k group name prefix must only contain lowercase alphanumeric characters (e.g. 'rg')"
   }
 }
 
@@ -22,12 +22,13 @@ variable "resource_groups" {
     location = string
     tags     = optional(map(string), {})
   }))
-  description = "Map of resource group objects to deploy"
+  description = "Map of k group objects to deploy"
 
   validation {
-    condition = alltrue(
-      [for resource in var.resource_groups : can(regex("^[a-z0-9]+$", resource.location))]
-    )
-    error_message = "Resource group locations must only contain lowercase alphanumeric characters (e.g. 'eastus', 'northeurope')"
+    condition = alltrue([
+      for k in var.resource_groups :
+      can(regex("^[a-z0-9]+$", k.location))
+    ])
+    error_message = "k group locations must only contain lowercase alphanumeric characters (e.g. 'eastus', 'northeurope')"
   }
 }

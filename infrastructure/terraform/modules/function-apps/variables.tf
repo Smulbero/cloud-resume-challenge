@@ -8,7 +8,7 @@ variable "general_tags" {
 
 variable "resource_name_prefix" {
   type        = string
-  description = "Prefix value for resource group name"
+  description = "Prefix value for k group name"
   default     = "fa"
 
   validation {
@@ -22,7 +22,7 @@ variable "resource_groups" {
     name     = string
     location = string
   }))
-  description = "Map of resource group objects name, and location"
+  description = "Map of k group objects name, and location"
 }
 
 variable "storage_accounts" {
@@ -66,29 +66,28 @@ variable "function_apps" {
   description = "Map of function app objects to deploy"
 
   validation {
-    condition = alltrue(
-      [for resource in var.function_apps : length(resource.name) <= 32 - length(var.resource_name_prefix) - 1] # -1 from '-' between name prefix and the name
-    )
+    condition = alltrue([
+      for k in var.function_apps :
+      length(k.name) <= 32 - length(var.resource_name_prefix) - 1 # -1 from '-' between name prefix and the name
+    ])
     error_message = "value"
   }
 
   validation {
-    condition = alltrue(
-      [for resource in var.function_apps :
-        contains(["node", "dotnet-isolated", "powershell", "python", "java", "custom"], resource.runtime_name)
-      ]
-    )
+    condition = alltrue([
+      for k in var.function_apps :
+      contains(["node", "dotnet-isolated", "powershell", "python", "java", "custom"], k.runtime_name)
+    ])
     error_message = "Acceptable runtime names: 'node', 'dotnet-isolated', 'powershell', 'python', 'java', and 'custom'"
   }
 
   validation {
-    condition = alltrue(
-      [for resource in var.function_apps :
-        resource.runtime_name == "python" ?
-        contains([3.14, 3.13, 3.12, 3.11, 3.10], resource.runtime_version) :
-        true
-      ]
-    )
+    condition = alltrue([
+      for k in var.function_apps :
+      k.runtime_name == "python" ?
+      contains([3.14, 3.13, 3.12, 3.11, 3.10], k.runtime_version) :
+      true
+    ])
     error_message = "Acceptable Python versions: '3.10', '3.11', '3.12', '3.13', and '3.14'"
   }
 }

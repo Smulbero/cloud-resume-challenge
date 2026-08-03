@@ -33,13 +33,10 @@ resource "azurerm_storage_account" "this" {
 }
 
 resource "azurerm_storage_account_static_website" "this" {
-  for_each = {
-    for k, v in var.storage_accounts : k => v.static_website
-    if v.static_website != null
-  }
+  for_each = var.storage_account_static_websites
 
   # Required attributes
-  storage_account_id = azurerm_storage_account.this[each.key].id
+  storage_account_id = azurerm_storage_account.this[each.value.storage_account_key].id
 
   # Optional attributes
   index_document     = each.value.index_document
@@ -47,12 +44,10 @@ resource "azurerm_storage_account_static_website" "this" {
 }
 
 resource "azurerm_storage_container" "this" {
-  for_each = {
-    for k, v in var.storage_accounts : k => v.container
-    if v.container != null
-  }
+  for_each = var.storage_account_containers
 
+  # Required attributes
   name                  = each.value.name
-  storage_account_id    = azurerm_storage_account.this[each.key].id
+  storage_account_id    = azurerm_storage_account.this[each.value.storage_account_key].id
   container_access_type = each.value.container_access_type
 }
