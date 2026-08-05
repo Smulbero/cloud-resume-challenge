@@ -85,15 +85,25 @@ variable "function_apps" {
     resource_group_key          = string
     storage_account_key         = string
     service_plan_key            = string
+    frontdoor_endpoint_key      = string
+    frontdoor_profile_key       = string
     name                        = string
     storage_container_type      = optional(string, "blobContainer")
     storage_authentication_type = optional(string, "SystemAssignedIdentity")
     runtime_name                = string
     runtime_version             = number
+    site_config = object({
+      cors = optional(object({
+        allowed_origins = optional(list(string), [])
+      }), null)
+    })
 
     # Optional attributes
     app_settings = optional(map(string), {})
-    tags         = optional(map(string), {})
+    identity = optional(object({
+      type = optional(string, "SystemAssigned")
+    }), null)
+    tags = optional(map(string), {})
   }))
   description = "Map of function app objects to deploy"
 }
@@ -254,4 +264,13 @@ variable "frontdoor_routes" {
     }), null)
   }))
   description = "Map of front door routes to deploy"
+}
+
+# ==================================================
+# Cloudflare
+# ==================================================
+variable "cloudflare_zone_id" {
+  type        = string
+  description = "The Cloudflare Zone ID that DNS records will be created in"
+  sensitive   = true
 }

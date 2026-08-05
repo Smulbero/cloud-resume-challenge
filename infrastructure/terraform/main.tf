@@ -30,19 +30,6 @@ module "service_plans" {
 }
 
 # ==================================================
-# Function Apps
-# ==================================================
-module "function_apps" {
-  source             = "./modules/function-apps"
-  resource_groups    = module.resource_groups.resource_groups
-  storage_accounts   = module.storage_accounts.storage_accounts
-  storage_containers = module.storage_accounts.storage_containers
-  service_plans      = module.service_plans.service_plans
-  function_apps      = var.function_apps
-  general_tags       = local.general_tags
-}
-
-# ==================================================
 # Cosmos DBs
 # ==================================================
 module "cosmos_dbs" {
@@ -67,4 +54,47 @@ module "frontdoors" {
   frontdoor_custom_domains = var.frontdoor_custom_domains
   frontdoor_routes         = var.frontdoor_routes
   general_tags             = local.general_tags
+}
+
+# ==================================================
+# Function Apps
+# ==================================================
+module "function_apps" {
+  source              = "./modules/function-apps"
+  resource_groups     = module.resource_groups.resource_groups
+  storage_accounts    = module.storage_accounts.storage_accounts
+  storage_containers  = module.storage_accounts.storage_containers
+  service_plans       = module.service_plans.service_plans
+  frontdoor_endpoints = module.frontdoors.frontdoor_endpoints
+  frontdoor_profiles  = module.frontdoors.frontdoor_profiles
+  function_apps       = var.function_apps
+  general_tags        = local.general_tags
+}
+
+# ==================================================
+# Cloudflare DNS Records
+# ==================================================
+locals {
+  cloudflare_dns_records = merge(
+    {
+      for k, v in module.frontdoors.frontdoor_custom_domain_validation_tokens : "${k}-validation" => {
+        name    = "_dnsauth.${var.frontdoor_custom_domains[k].host_name}"
+        type    = "TXT"
+        content = "\"${v}\""
+      }
+    },
+    {
+      for k, v in module.frontdoors.frontdoor_endpoint_hostnames : "${k}-cname" => {
+        name    = var.frontdoor_custom_domains[k].host_name
+        type    = "CNAME"
+        content = v
+      }
+    }
+  )
+}
+
+module "cloudflare_dns_records" {
+  source             = "./modules/cloudflare-dns-records"
+  cloudflare_zone_id = var.cloudflare_zone_id
+  dns_records        = local.cloudflare_dns_records
 }
