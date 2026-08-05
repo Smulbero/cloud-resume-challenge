@@ -8,7 +8,7 @@ variable "general_tags" {
 
 variable "resource_name_prefix" {
   type        = string
-  description = "Prefix value for k group name"
+  description = "Prefix value for resources name"
   default     = "fa"
 
   validation {
@@ -22,7 +22,7 @@ variable "resource_groups" {
     name     = string
     location = string
   }))
-  description = "Map of k group objects name, and location"
+  description = "Map of resource group objects name, and location"
 }
 
 variable "storage_accounts" {
@@ -47,21 +47,64 @@ variable "service_plans" {
   description = "Map of service plan objects id"
 }
 
+variable "frontdoor_endpoints" {
+  type = map(object({
+    host_name = string
+  }))
+  description = "Map of frontdoor endpoint host names"
+}
+
+variable "frontdoor_profiles" {
+  type = map(object({
+    id = string
+    resource_guid = string
+  }))
+  description = "Map of frontdoor profiles"
+}
+
+variable "random_integer" {
+  type = object({
+    min = number
+    max = number
+  })
+  description = "Min and Max values for random_integer k"
+
+  default = {
+    min = 1000
+    max = 9999
+  }
+
+  validation {
+    condition     = var.random_integer.min < var.random_integer.max
+    error_message = "Min value must be smaller than max value"
+  }
+}
+
 variable "function_apps" {
   type = map(object({
     # Required attributes
     resource_group_key          = string
     storage_account_key         = string
     service_plan_key            = string
+    frontdoor_endpoint_key      = string
+    frontdoor_profile_key       = string
     name                        = string
     storage_container_type      = optional(string, "blobContainer")
     storage_authentication_type = optional(string, "SystemAssignedIdentity")
     runtime_name                = string
     runtime_version             = number
+    site_config = object({
+      cors = optional(object({
+        allowed_origins = optional(list(string), [])
+      }), null)
+    })
 
     # Optional attributes
     app_settings = optional(map(string), {})
-    tags         = optional(map(string), {})
+    identity = optional(object({
+      type = optional(string, "SystemAssigned")
+    }), null)
+    tags = optional(map(string), {})
   }))
   description = "Map of function app objects to deploy"
 
