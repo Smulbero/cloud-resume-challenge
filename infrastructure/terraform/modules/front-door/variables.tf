@@ -43,7 +43,7 @@ variable "random_integer" {
 
 variable "resource_name_prefix" {
   type        = string
-  description = "Prefix value for resource group name"
+  description = "Prefix value for resources name"
   default     = "afd"
 
   validation {

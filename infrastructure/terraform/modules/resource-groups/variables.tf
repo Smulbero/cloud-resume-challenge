@@ -8,7 +8,7 @@ variable "general_tags" {
 
 variable "resource_name_prefix" {
   type        = string
-  description = "Prefix value for k group name"
+  description = "Prefix value for resources name"
   default     = "rg"
 
   validation {

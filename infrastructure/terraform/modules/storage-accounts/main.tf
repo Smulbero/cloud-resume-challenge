@@ -4,6 +4,10 @@ resource "random_integer" "this" {
   # Required attributes
   min = var.random_integer.min
   max = var.random_integer.max
+
+  keepers = {
+    ran_int = each.key
+  }
 }
 
 resource "azurerm_storage_account" "this" {

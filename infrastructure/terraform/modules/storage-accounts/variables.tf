@@ -12,7 +12,7 @@ variable "resource_groups" {
     name     = string
     location = string
   }))
-  description = "Map of k group objects name, and location"
+  description = "Map of resource group objects name, and location"
 }
 
 variable "random_integer" {
@@ -30,6 +30,17 @@ variable "random_integer" {
   validation {
     condition     = var.random_integer.min < var.random_integer.max
     error_message = "Min value must be smaller than max value"
+  }
+}
+
+variable "resource_name_prefix" {
+  type        = string
+  description = "Prefix value for resources name"
+  default     = "sa"
+
+  validation {
+    condition     = can(regex("^[a-z0-9]+$", var.resource_name_prefix))
+    error_message = "The service plan name prefix must only contain lowercase alphanumeric characters (e.g. 'sa')"
   }
 }
 
@@ -51,7 +62,7 @@ variable "storage_accounts" {
   validation {
     condition = alltrue([
       for k in var.storage_accounts :
-      length(k.name) >= 3 && length(k.name) <= 24 - length(tostring(var.random_integer.max)) &&
+      length(k.name) >= 3 && length(k.name) <= 24 - length(tostring(var.random_integer.max)) - length(var.resource_name_prefix) &&
       can(regex("^[a-z0-9]+$", k.name))
     ])
     error_message = "Storage Account name must be between 3 and 24 (minus length of random_integer, default 4) characters, all lowercased, and must not contain any special characters"

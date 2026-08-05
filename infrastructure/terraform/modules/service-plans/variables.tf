@@ -11,17 +11,35 @@ variable "resource_groups" {
     name     = string
     location = string
   }))
-  description = "Map of k group objects name, and location"
+  description = "Map of resource group objects name, and location"
 }
 
 variable "resource_name_prefix" {
   type        = string
-  description = "Prefix value for k group name"
+  description = "Prefix value for resources name"
   default     = "sp"
 
   validation {
     condition     = can(regex("^[a-z0-9]+$", var.resource_name_prefix))
     error_message = "The service plan name prefix must only contain lowercase alphanumeric characters (e.g. 'sp')"
+  }
+}
+
+variable "random_integer" {
+  type = object({
+    min = number
+    max = number
+  })
+  description = "Min and Max values for random_integer k"
+
+  default = {
+    min = 1000
+    max = 9999
+  }
+
+  validation {
+    condition     = var.random_integer.min < var.random_integer.max
+    error_message = "Min value must be smaller than max value"
   }
 }
 

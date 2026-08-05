@@ -4,6 +4,10 @@ resource "random_integer" "this" {
   # Required attributes
   min = var.random_integer.min
   max = var.random_integer.max
+
+  keepers = {
+    ran_int = each.key
+  }
 }
 
 resource "azurerm_cdn_frontdoor_profile" "this" {
@@ -140,11 +144,15 @@ resource "azurerm_cdn_frontdoor_route" "this" {
   https_redirect_enabled          = each.value.https_redirect_enabled
   link_to_default_domain          = each.value.link_to_default_domain
   forwarding_protocol             = each.value.forwarding_protocol
-  cache {
-    # Optional
-    query_string_caching_behavior = each.value.cache != null ? each.value.cache.query_string_caching_behavior : "IgnoreQueryString"
-    query_strings                 = each.value.cache != null ? each.value.cache.query_strings : null
-    compression_enabled           = each.value.cache != null ? each.value.cache.compression_enabled : null
-    content_types_to_compress     = each.value.cache != null ? each.value.cache.content_types_to_compress : null
+  dynamic "cache" {
+    for_each = each.value.cache != null ? [each.value.cache] : []
+
+    content {
+      # Optional
+      query_string_caching_behavior = cache.value.query_string_caching_behavior
+      query_strings                 = cache.value.query_strings
+      compression_enabled           = cache.value.compression_enabled
+      content_types_to_compress     = cache.value.content_types_to_compress
+    }
   }
 }
