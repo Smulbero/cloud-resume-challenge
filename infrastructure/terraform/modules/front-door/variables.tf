@@ -338,3 +338,82 @@ variable "frontdoor_routes" {
     error_message = "Acceptable values for cache blocks 'query_string_caching_behavior' attribute: 'IgnoreQueryString', 'IgnoreSpecifiedQueryStrings', 'IncludeSpecifiedQueryStrings', and 'UseQueryString'"
   }
 }
+
+variable "frontdoor_firewall_policies" {
+  type = map(object({
+    # Required attributes
+    name                  = string
+    resource_group_key    = string
+    frontdoor_profile_key = string
+    mode                  = string
+
+    # Optional attributes
+    custom_rules = map(object({
+      # Required attributes
+      name   = string
+      action = string
+      type   = string
+      # Optional attributes
+      priority                       = optional(number, 1)
+      rate_limit_duration_in_minutes = optional(number, 1)
+      rate_limit_threshold           = optional(number, 10)
+      match_conditions = map(object({
+        # Required attributes
+        match_variable = string
+        match_values   = list(string)
+        operator       = string
+      }))
+    }))
+  }))
+  description = "Map of front door WAF firewall policies to deploy"
+
+  validation {
+    condition = alltrue([
+      for k in var.frontdoor_firewall_policies :
+      contains(["Detection", "Prevention"], k.mode)
+    ])
+    error_message = "Acceptable values for 'mode' attribute: 'Detection', and 'Prevention'"
+  }
+
+  validation {
+    condition = alltrue(flatten([
+      for k in var.frontdoor_firewall_policies : [
+        for rule_key, rule in k.custom_rules :
+        contains(["MatchRule", "RateLimitRule"], rule.type)
+      ]
+    ]))
+    error_message = "Acceptable values for custom rule 'type' attribute: 'MatchRule', and 'RateLimitRule'"
+  }
+
+  validation {
+    condition = alltrue(flatten([
+      for k in var.frontdoor_firewall_policies : [
+        for rule_key, rule in k.custom_rules :
+        contains(["Allow", "Block", "Log", "Redirect", "JSChallenge", "CAPTCHA"], rule.action)
+      ]
+    ]))
+    error_message = "Acceptable values for custom rule 'action' attribute: 'Allow', 'Block', 'Log', 'Redirect', 'JSChalllenge', and 'CAPTCHA'"
+  }
+
+  validation {
+    condition = alltrue(flatten([
+      for k in var.frontdoor_firewall_policies : [
+        for rule_key, rule in k.custom_rules :
+        rule.type == "RateLimitRule" ?
+        (rule.rate_limit_threshold >= 1 && rule.rate_limit_duration_in_minutes >= 1 && rule.rate_limit_duration_in_minutes <= 5) : true
+      ]
+    ]))
+    error_message = "For 'RateLimitRule' type, 'rate_limit_threshold' must be >= 1 and 'rate_limit_duration_in_minutes' must be between 1 and 5"
+  }
+}
+
+variable "frontdoor_security_policies" {
+  type = map(object({
+    # Required attributes
+    name                          = string
+    frontdoor_profile_key         = string
+    frontdoor_firewall_policy_key = string
+    frontdoor_custom_domain_key   = string
+  }))
+  description = "Map of front door security policies (WAF-to-domain associations) to deploy"
+}

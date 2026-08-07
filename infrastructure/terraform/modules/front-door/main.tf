@@ -156,3 +156,62 @@ resource "azurerm_cdn_frontdoor_route" "this" {
     }
   }
 }
+
+resource "azurerm_cdn_frontdoor_firewall_policy" "this" {
+  for_each = var.frontdoor_firewall_policies
+
+  # Required attributes
+  name                = each.value.name
+  resource_group_name = var.resource_groups[each.value.resource_group_key].name
+  sku_name            = azurerm_cdn_frontdoor_profile.this[each.value.frontdoor_profile_key].sku_name
+  mode                = each.value.mode
+
+  # Optional attributes
+  dynamic "custom_rule" {
+    for_each = each.value.custom_rules
+
+    content {
+      # Required
+      name   = custom_rule.value.name
+      action = custom_rule.value.action
+      type   = custom_rule.value.type
+
+      # Optional
+      priority                       = custom_rule.value.priority
+      rate_limit_duration_in_minutes = custom_rule.value.rate_limit_duration_in_minutes
+      rate_limit_threshold           = custom_rule.value.rate_limit_threshold
+
+      dynamic "match_condition" {
+        for_each = custom_rule.value.match_conditions
+
+        content {
+          # Required
+          match_variable = match_condition.value.match_variable
+          match_values   = match_condition.value.match_values
+          operator       = match_condition.value.operator
+        }
+      }
+    }
+  }
+}
+
+resource "azurerm_cdn_frontdoor_security_policy" "this" {
+  for_each = var.frontdoor_security_policies
+
+  # Required attributes
+  name                     = each.value.name
+  cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.this[each.value.frontdoor_profile_key].id
+
+  security_policies {
+    firewall {
+      cdn_frontdoor_firewall_policy_id = azurerm_cdn_frontdoor_firewall_policy.this[each.value.frontdoor_firewall_policy_key].id
+
+      association {
+        domain {
+          cdn_frontdoor_domain_id = azurerm_cdn_frontdoor_custom_domain.this[each.value.frontdoor_custom_domain_key].id
+        }
+        patterns_to_match = ["/*"]
+      }
+    }
+  }
+}
