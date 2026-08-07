@@ -56,7 +56,7 @@ variable "frontdoor_endpoints" {
 
 variable "frontdoor_profiles" {
   type = map(object({
-    id = string
+    id            = string
     resource_guid = string
   }))
   description = "Map of frontdoor profiles"
