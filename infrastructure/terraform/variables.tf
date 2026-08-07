@@ -18,8 +18,11 @@ locals {
 # ==================================================
 variable "resource_groups" {
   type = map(object({
+    # Required attributes
     location = string
-    tags     = optional(map(string), {})
+
+    # Optional attributes
+    tags = optional(map(string), {})
   }))
   description = "Map of resource group objects to deploy"
 }
@@ -45,14 +48,18 @@ variable "storage_accounts" {
 
 variable "storage_account_static_websites" {
   type = map(object({
+    # Required attributes
     storage_account_key = string
-    index_document      = optional(string, "index.html")
-    error_404_document  = optional(string, "404.html")
+
+    # Optional attributes
+    index_document     = optional(string, "index.html")
+    error_404_document = optional(string, "404.html")
   }))
 }
 
 variable "storage_account_containers" {
   type = map(object({
+    # Required attributes
     storage_account_key   = string
     name                  = string
     container_access_type = string
@@ -139,10 +146,13 @@ variable "cosmos_db_accounts" {
 
 variable "cosmos_db_tables" {
   type = map(object({
+    # Required attributes
     resource_group_key   = string
     cosmosdb_account_key = string
     name                 = string
-    throughput           = optional(number, 400)
+
+    # Optional attributes
+    throughput = optional(number, 400)
   }))
   description = "Map of Cosmos DB objects to deploy"
 }
@@ -227,9 +237,12 @@ variable "frontdoor_origins" {
 
 variable "frontdoor_custom_domains" {
   type = map(object({
+    # Required attributes
     name                  = string
     frontdoor_profile_key = string
     host_name             = string
+
+    # Optional attributes
     tls = object({
       certificate_type = optional(string, "ManagedCertificate")
       minimum_version  = optional(string, "TLS12")
@@ -264,6 +277,46 @@ variable "frontdoor_routes" {
     }), null)
   }))
   description = "Map of front door routes to deploy"
+}
+
+variable "frontdoor_firewall_policies" {
+  type = map(object({
+    # Required attributes
+    name                  = string
+    resource_group_key    = string
+    frontdoor_profile_key = string
+    mode                  = string
+
+    # Optional attributes
+    custom_rules = map(object({
+      # Required attributes
+      name   = string
+      action = string
+      type   = string
+      # Optional attributes
+      priority                       = optional(number, 1)
+      rate_limit_duration_in_minutes = optional(number, 1)
+      rate_limit_threshold           = optional(number, 10)
+      match_conditions = map(object({
+        # Required attributes
+        match_variable = string
+        match_values   = list(string)
+        operator       = string
+      }))
+    }))
+  }))
+  description = "Map of front door WAF firewall policies to deploy"
+}
+
+variable "frontdoor_security_policies" {
+  type = map(object({
+    # Required attributes
+    name                          = string
+    frontdoor_profile_key         = string
+    frontdoor_firewall_policy_key = string
+    frontdoor_custom_domain_key   = string
+  }))
+  description = "Map of front door security policies (WAF-to-domain associations) to deploy"
 }
 
 # ==================================================
