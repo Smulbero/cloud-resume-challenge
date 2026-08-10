@@ -15,6 +15,8 @@ resource "azurerm_function_app_flex_consumption" "this" {
   storage_authentication_type = each.value.storage_authentication_type
   runtime_name                = each.value.runtime_name
   runtime_version             = each.value.runtime_version
+  maximum_instance_count      = 10
+  instance_memory_in_mb       = 2048
   site_config {
     cors {
       allowed_origins = concat([var.frontdoor_endpoints[each.value.frontdoor_endpoint_key].host_name], each.value.site_config.cors.allowed_origins)
