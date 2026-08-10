@@ -14,15 +14,20 @@ output "cosmos_db_accounts" {
   }
 }
 
-# output "function_app_identities" {
-#   value = module.function_apps.function_app_identities
-# }
+output "frontdoor_origins" {
+  value = {
+    for k, v in module.frontdoors.frontdoor_origins : k => {
+      name = v.name
+      host_name = v.host_name
+    }
+  }
+}
 
 output "function_apps_flex" {
   value = {
     for k, v in module.function_apps.function_apps_flex : k => {
       name = v.name
-      principal_id = v.identity[*].principal_id
+      principal_id = v.identity[0].principal_id
     } 
   }
 }
