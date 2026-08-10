@@ -17,3 +17,12 @@ output "cosmos_db_account_endpoints" {
     for k, v in azurerm_cosmosdb_account.this : k => v.endpoint
   }
 }
+output "cosmos_db_names" {
+  type        = map(any)
+  description = "A mapping of keys to cosmos db names"
+  value = {
+    for k, v in azurerm_cosmosdb_account.this : k => {
+      name = v.name
+    }
+  }
+}

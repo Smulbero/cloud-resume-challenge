@@ -4,10 +4,12 @@ output "resource_groups" {
   value       = azurerm_resource_group.this
 }
 
-output "names" {
-  type        = map(string)
+output "resource_group_names" {
+  type        = map(any)
   description = "A mapping of keys to resource group names"
   value = {
-    for k, v in azurerm_resource_group.this : k => v.name
+    for k, v in azurerm_resource_group.this : k => {
+      name = v.name
+    }
   }
 }

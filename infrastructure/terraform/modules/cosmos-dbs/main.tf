@@ -2,7 +2,7 @@ resource "azurerm_cosmosdb_account" "this" {
   for_each = var.cosmos_db_accounts
 
   # Required attributes
-  name = each.value.name
+  name                = each.value.name
   location            = var.resource_groups[each.value.resource_group_key].location
   resource_group_name = var.resource_groups[each.value.resource_group_key].name
   offer_type          = each.value.offer_type

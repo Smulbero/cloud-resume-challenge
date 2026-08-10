@@ -36,12 +36,16 @@ output "frontdoor_routes" {
 
 output "frontdoor_custom_domain_validation_tokens" {
   value = {
-    for k, v in azurerm_cdn_frontdoor_custom_domain.this : k => v.validation_token
+    for k, v in azurerm_cdn_frontdoor_custom_domain.this : k => {
+      validation_token = v.validation_token
+    }
   }
 }
 
 output "frontdoor_endpoint_hostnames" {
   value = {
-    for k, v in azurerm_cdn_frontdoor_endpoint.this : k => v.host_name
+    for k, v in azurerm_cdn_frontdoor_endpoint.this : k => {
+      host_name = v.host_name
+    }
   }
 }
