@@ -1,3 +1,11 @@
+resource "time_static" "this" {}
+locals {
+  general_tags = merge(
+    { deployedDate = formatdate("DD-MM-YYYY", time_static.this.rfc3339) },
+    var.general_tags
+  )
+}
+
 # ==================================================
 # Resource Groups
 # ==================================================

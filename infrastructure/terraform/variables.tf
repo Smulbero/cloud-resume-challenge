@@ -6,13 +6,6 @@ variable "general_tags" {
   }
 }
 
-locals {
-  general_tags = merge(
-    { deployedDate = formatdate("DD-MM-YYYY", timestamp()) },
-    var.general_tags
-  )
-}
-
 # ==================================================
 # Resource Groups
 # ==================================================
