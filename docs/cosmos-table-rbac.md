@@ -59,9 +59,9 @@ Create a JSON body file, e.g. `role-assignment.json`:
 ```json
 {
   "properties": {
+    "scope": "<$resourceId from step 1>",
     "roleDefinitionId": "<full id copied from step 2>",
-    "principalId": "<id from step 3>",
-    "scope": "/"
+    "principalId": "<id from step 3>"
   }
 }
 ```
@@ -74,7 +74,7 @@ uuidgen
 
 az rest \
   --method "PUT" \
-  --url "$resourceId/tableRoleAssignments/<new-guid>?api-version=2023-04-15" \
+  --url "$resourceId/tableRoleAssignments/<new-guid>?api-version=2024-08-15" \
   --body @role-assignment.json
 ```
 
@@ -83,7 +83,7 @@ az rest \
 ```bash
 az rest \
   --method "GET" \
-  --url "$resourceId/tableRoleAssignments?api-version=2023-04-15"
+  --url "$resourceId/tableRoleAssignments?api-version=2024-08-15"
 ```
 
 Confirm your `principalId` appears in the list with the correct `roleDefinitionId`.
