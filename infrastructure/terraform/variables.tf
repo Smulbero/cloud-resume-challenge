@@ -220,8 +220,8 @@ variable "frontdoor_origins" {
     # Required attributes
     name                           = string
     frontdoor_origin_group_key     = string
-    storage_account_key            = optional(string)
-    host_name                      = optional(string)
+    storage_account_key            = optional(string, null)
+    host_name                      = optional(string, null)
     certificate_name_check_enabled = bool
 
     # Optional attributes

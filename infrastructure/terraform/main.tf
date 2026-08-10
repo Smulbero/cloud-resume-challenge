@@ -82,14 +82,14 @@ locals {
       for k, v in module.frontdoors.frontdoor_custom_domain_validation_tokens : "${k}-validation" => {
         name    = "_dnsauth.${var.frontdoor_custom_domains[k].host_name}"
         type    = "TXT"
-        content = "\"${v}\""
+        content = "\"${v.validation_token}\""
       }
     },
     {
       for k, v in module.frontdoors.frontdoor_endpoint_hostnames : "${k}-cname" => {
         name    = var.frontdoor_custom_domains[k].host_name
         type    = "CNAME"
-        content = v
+        content = v.host_name
       }
     }
   )
@@ -99,4 +99,24 @@ module "cloudflare_dns_records" {
   source             = "./modules/cloudflare-dns-records"
   cloudflare_zone_id = var.cloudflare_zone_id
   dns_records        = local.cloudflare_dns_records
+}
+
+# ==================================================
+# Role Assignments
+# ==================================================
+locals {
+  role_assignments = merge(
+    {
+      for k, v in module.function_apps.function_apps_flex : k => {
+        scope                = module.storage_accounts.storage_accounts[k].id
+        principal_id         = v.identity[0].principal_id
+        role_definition_name = "Storage Blob Data Contributor"
+      }
+    }
+  )
+}
+
+module "role_assignments" {
+  source           = "./modules/role-assignments"
+  role_assingments = local.role_assignments
 }
