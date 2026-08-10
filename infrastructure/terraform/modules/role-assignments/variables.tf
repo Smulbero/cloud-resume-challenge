@@ -1,4 +1,4 @@
-variable "role_assingments" {
+variable "role_assignments" {
   type = map(object({
     # Required attributes
     scope        = string
@@ -14,7 +14,7 @@ variable "role_assingments" {
 
   validation {
     condition = alltrue([
-      for k in var.role_assingments :
+      for k in var.role_assignments :
       k.role_definition_id != null || k.role_definition_name != null
     ])
     error_message = "Either 'role_definition_id' or 'role_definition_name' must be provided"
@@ -22,7 +22,7 @@ variable "role_assingments" {
 
   validation {
     condition = alltrue([
-      for k in var.role_assingments :
+      for k in var.role_assignments :
       k.principal_type != null ?
       contains(["User", "Group", "ServicePrincipal"], k.principal_type) : true
     ])

@@ -115,10 +115,10 @@ module "cloudflare_dns_records" {
 locals {
   role_assignments = merge(
     {
-      for k, v in module.function_apps.function_apps_flex : k => {
+      for k, v in module.function_apps.function_apps_flex : "${k}-blob-owner" => {
         scope                = module.storage_accounts.storage_accounts[k].id
         principal_id         = v.identity[0].principal_id
-        role_definition_name = "Storage Blob Data Contributor"
+        role_definition_name = "Storage Blob Data Owner"
       }
     }
   )
@@ -126,5 +126,5 @@ locals {
 
 module "role_assignments" {
   source           = "./modules/role-assignments"
-  role_assingments = local.role_assignments
+  role_assignments = local.role_assignments
 }

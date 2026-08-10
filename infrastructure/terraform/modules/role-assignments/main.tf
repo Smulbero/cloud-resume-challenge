@@ -1,5 +1,5 @@
 resource "azurerm_role_assignment" "this" {
-  for_each = var.role_assingments
+  for_each = var.role_assignments
 
   # Required attributes
   scope        = each.value.scope
