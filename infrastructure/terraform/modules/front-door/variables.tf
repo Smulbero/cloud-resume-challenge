@@ -412,19 +412,19 @@ variable "frontdoor_firewall_policies" {
   }
 
   validation {
-  condition = alltrue(flatten([
-    for policy in var.frontdoor_firewall_policies : [
-      for rule in policy.custom_rules : [
-        for match in rule.match_conditions :
-        match.transforms == null ? true : alltrue([
-          for t in match.transforms :
-          contains(["Lowercase", "RemoveNulls", "Trim", "Uppercase", "URLDecode", "URLEncode"], t)
-        ])
+    condition = alltrue(flatten([
+      for policy in var.frontdoor_firewall_policies : [
+        for rule in policy.custom_rules : [
+          for match in rule.match_conditions :
+          match.transforms == null ? true : alltrue([
+            for t in match.transforms :
+            contains(["Lowercase", "RemoveNulls", "Trim", "Uppercase", "URLDecode", "URLEncode"], t)
+          ])
+        ]
       ]
-    ]
-  ]))
-  error_message = "Acceptable values for 'match_conditions' blocks 'transforms' attribute: 'Lowercase', 'RemoveNulls', 'Trim', 'Uppercase', 'URLDecode', or 'URLEncode'."
-}
+    ]))
+    error_message = "Acceptable values for 'match_conditions' blocks 'transforms' attribute: 'Lowercase', 'RemoveNulls', 'Trim', 'Uppercase', 'URLDecode', or 'URLEncode'."
+  }
 }
 
 variable "frontdoor_security_policies" {
