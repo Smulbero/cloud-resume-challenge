@@ -40,7 +40,7 @@ resource "azurerm_function_app_flex_consumption" "this" {
   app_settings = merge(
     { "AzureWebJobsStorage__accountName" = var.storage_accounts[each.value.storage_account_key].name },
     each.value.app_settings
-    )
+  )
   dynamic "identity" {
     for_each = each.value.identity != null ? [each.value.identity] : []
 
