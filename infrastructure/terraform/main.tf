@@ -52,7 +52,7 @@ module "cosmos_dbs" {
 # Front Doors
 # ==================================================
 module "frontdoors" {
-  source                      = "./modules/front-door"
+  source                      = "./modules/front-doors"
   resource_groups             = module.resource_groups.resource_groups
   storage_accounts            = module.storage_accounts.storage_accounts
   frontdoor_profiles          = var.frontdoor_profiles
