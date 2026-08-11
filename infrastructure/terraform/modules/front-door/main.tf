@@ -178,6 +178,7 @@ resource "azurerm_cdn_frontdoor_firewall_policy" "this" {
 
       # Optional
       priority                       = custom_rule.value.priority
+      enabled                        = custom_rule.value.enabled
       rate_limit_duration_in_minutes = custom_rule.value.rate_limit_duration_in_minutes
       rate_limit_threshold           = custom_rule.value.rate_limit_threshold
 
@@ -189,6 +190,10 @@ resource "azurerm_cdn_frontdoor_firewall_policy" "this" {
           match_variable = match_condition.value.match_variable
           match_values   = match_condition.value.match_values
           operator       = match_condition.value.operator
+          # Optional
+          selector           = match_condition.value.selector
+          negation_condition = match_condition.value.negation_condition
+          transforms         = match_condition.value.transforms
         }
       }
     }

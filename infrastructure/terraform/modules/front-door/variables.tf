@@ -355,6 +355,7 @@ variable "frontdoor_firewall_policies" {
       type   = string
       # Optional attributes
       priority                       = optional(number, 1)
+      enabled                        = optional(bool, true)
       rate_limit_duration_in_minutes = optional(number, 1)
       rate_limit_threshold           = optional(number, 10)
       match_conditions = map(object({
@@ -362,6 +363,10 @@ variable "frontdoor_firewall_policies" {
         match_variable = string
         match_values   = list(string)
         operator       = string
+        # Optional attributes
+        selector           = optional(string, null)
+        negation_condition = optional(bool, false)
+        transforms         = optional(list(string), null)
       }))
     }))
   }))
@@ -405,6 +410,21 @@ variable "frontdoor_firewall_policies" {
     ]))
     error_message = "For 'RateLimitRule' type, 'rate_limit_threshold' must be >= 1 and 'rate_limit_duration_in_minutes' must be between 1 and 5"
   }
+
+  validation {
+  condition = alltrue(flatten([
+    for policy in var.frontdoor_firewall_policies : [
+      for rule in policy.custom_rules : [
+        for match in rule.match_conditions :
+        match.transforms == null ? true : alltrue([
+          for t in match.transforms :
+          contains(["Lowercase", "RemoveNulls", "Trim", "Uppercase", "URLDecode", "URLEncode"], t)
+        ])
+      ]
+    ]
+  ]))
+  error_message = "Acceptable values for 'match_conditions' blocks 'transforms' attribute: 'Lowercase', 'RemoveNulls', 'Trim', 'Uppercase', 'URLDecode', or 'URLEncode'."
+}
 }
 
 variable "frontdoor_security_policies" {
