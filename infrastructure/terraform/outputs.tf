@@ -39,3 +39,19 @@ output "frontdoor_custom_domain_validation_tokens" {
 output "frontdoor_endpoint_hostnames" {
   value = module.frontdoors.frontdoor_endpoint_hostnames
 }
+
+output "storage_accounts" {
+  value = {
+    for k, v in module.storage_accounts.storage_accounts : k => {
+      name = v.name
+    }
+  }
+}
+
+output "storage_containers" {
+  value = {
+    for k, v in module.storage_accounts.storage_containers : k => {
+      name = v.name
+    }
+  }
+}

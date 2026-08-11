@@ -17,12 +17,16 @@ terraform {
       version = "~> 0.14"
     }
   }
+  backend "azurerm" {
+  }
 }
 
 provider "azurerm" {
   features {}
 }
 
-provider "cloudflare" {}
+provider "cloudflare" {
+  api_token = var.cloudflare_api_token
+}
 
 provider "time" {}
