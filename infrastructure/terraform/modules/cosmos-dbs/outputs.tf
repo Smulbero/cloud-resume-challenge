@@ -1,0 +1,28 @@
+output "cosmos_db_accounts" {
+  type        = map(any)
+  description = "A map containing the full objects of the deployed cosmos db accounts"
+  value       = azurerm_cosmosdb_account.this
+}
+
+output "cosmos_db_tables" {
+  type        = map(any)
+  description = "A map containing the full objects of the deployed cosmos db tables"
+  value       = azurerm_cosmosdb_table.this
+}
+
+output "cosmos_db_account_endpoints" {
+  type        = map(any)
+  description = "A cosmos db account endpoints"
+  value = {
+    for k, v in azurerm_cosmosdb_account.this : k => v.endpoint
+  }
+}
+output "cosmos_db_names" {
+  type        = map(any)
+  description = "A mapping of keys to cosmos db names"
+  value = {
+    for k, v in azurerm_cosmosdb_account.this : k => {
+      name = v.name
+    }
+  }
+}
