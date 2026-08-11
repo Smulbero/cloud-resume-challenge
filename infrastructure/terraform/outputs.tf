@@ -1,9 +1,9 @@
 output "resource_groups" {
   value = {
     for k, v in module.resource_groups.resource_groups : k => {
-        name = v.name
-      }
+      name = v.name
     }
+  }
 }
 
 output "cosmos_db_accounts" {
@@ -17,7 +17,7 @@ output "cosmos_db_accounts" {
 output "frontdoor_origins" {
   value = {
     for k, v in module.frontdoors.frontdoor_origins : k => {
-      name = v.name
+      name      = v.name
       host_name = v.host_name
     }
   }
@@ -26,9 +26,9 @@ output "frontdoor_origins" {
 output "function_apps_flex" {
   value = {
     for k, v in module.function_apps.function_apps_flex : k => {
-      name = v.name
+      name         = v.name
       principal_id = v.identity[0].principal_id
-    } 
+    }
   }
 }
 

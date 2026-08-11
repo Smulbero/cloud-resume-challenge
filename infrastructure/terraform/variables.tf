@@ -288,6 +288,7 @@ variable "frontdoor_firewall_policies" {
       type   = string
       # Optional attributes
       priority                       = optional(number, 1)
+      enabled                        = optional(bool, true)
       rate_limit_duration_in_minutes = optional(number, 1)
       rate_limit_threshold           = optional(number, 10)
       match_conditions = map(object({
@@ -295,6 +296,10 @@ variable "frontdoor_firewall_policies" {
         match_variable = string
         match_values   = list(string)
         operator       = string
+        # Optional attributes
+        selector           = optional(string, null)
+        negation_condition = optional(bool, false)
+        transforms         = optional(list(string), null)
       }))
     }))
   }))
