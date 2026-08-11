@@ -3,6 +3,7 @@ import logging
 import os
 from azure.data.tables import TableServiceClient
 from azure.identity import DefaultAzureCredential
+from azure.core.exceptions import ResourceNotFoundError
 
 app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
@@ -23,11 +24,19 @@ def visitor_count(req: func.HttpRequest) -> func.HttpResponse:
         partition_key = os.environ["PARTITION_KEY"]
         row_key = os.environ["ROW_KEY"]
 
-        entity = table.get_entity(
-            partition_key=partition_key, 
-            row_key=row_key
-        )
-        entity["Count"] += 1
+        try:
+            entity = table.get_entity(
+                partition_key=partition_key, 
+                row_key=row_key
+            )
+            entity["Count"] += 1
+        except ResourceNotFoundError:
+            # Create the entity if it's not in database
+            entity = {
+                "PartitionKey": partition_key,
+                "RowKey": row_key,
+                "Count": 1
+            }
         table.upsert_entity(entity)
 
         return func.HttpResponse(

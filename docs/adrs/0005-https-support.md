@@ -27,3 +27,7 @@ At time of the writing, Azure CDN is in the process of being retired by 09/2027[
 **Negative**
 - AFD has higher baseline running cost compared to ACDN, which had no minimum fee for low-usage scenarios
 - Slightly more complex service to configure
+
+## References
+
+- [Azure CDN is retiring](https://learn.microsoft.com/en-us/azure/frontdoor/front-door-cdn-comparison#:~:text=Azure%20CDN%20Standard%20from%20Microsoft%20(classic)%20is%20retiring%20on%20September%2030%2C%202027.)

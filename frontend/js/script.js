@@ -7,7 +7,7 @@ async function initVisitorCounter() {
         return;
     }
     
-    const apiEndpoint = ""
+    const apiEndpoint = "/api/visitor-count";
     const visitorCounterElement = document.createElement("p");
     const visitorCounterTextPrefix = "Site Visitor Counter:"
     visitorCounterContainer.appendChild(visitorCounterElement);
