@@ -2,7 +2,7 @@
 
 > My take on the [Cloud Resume Challenge](https://cloudresumechallenge.dev/) - a personal resume website hosted on Azure, with a serverless visitor counter, built and deployed through automation tools such as Terraform..
  
-**🔗 Live site:** crc.smulbero.com
+**🔗 Live site:** [crc.smulbero.com](crc.smulbero.com)
 
 ---
 
