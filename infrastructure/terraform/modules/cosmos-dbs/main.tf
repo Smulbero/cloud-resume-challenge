@@ -40,6 +40,10 @@ resource "azurerm_cosmosdb_account" "this" {
     var.general_tags,
     each.value.tags
   )
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "azurerm_cosmosdb_table" "this" {
