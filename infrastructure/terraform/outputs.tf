@@ -10,6 +10,7 @@ output "cosmos_db_accounts" {
   value = {
     for k, v in module.cosmos_dbs.cosmos_db_accounts : k => {
       name = v.name
+      id = v.id
     }
   }
 }
