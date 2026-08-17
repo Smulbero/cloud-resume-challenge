@@ -1,3 +1,9 @@
+/*
+ * # Module: azure/role-assignments
+ *
+ * Creates one or more Azure Role Assignments from a map of definitions.
+ */
+ 
 resource "azurerm_role_assignment" "this" {
   for_each = var.role_assignments
 

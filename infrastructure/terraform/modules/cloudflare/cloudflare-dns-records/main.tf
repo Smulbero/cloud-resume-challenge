@@ -1,3 +1,9 @@
+/*
+ * # Module: cloudflare/cloudflare-dns-records
+ *
+ * Creates one or more Cloudflare DNS Records from a map of definitions.
+ */
+
 resource "cloudflare_dns_record" "this" {
   for_each = var.dns_records
 

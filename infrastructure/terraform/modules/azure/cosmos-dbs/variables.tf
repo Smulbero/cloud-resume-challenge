@@ -126,7 +126,7 @@ variable "cosmos_db_tables" {
     name                 = string
     throughput           = optional(number, 400)
   }))
-  description = "Map of Cosmos DB objects to deploy"
+  description = "Map of Cosmos DB Table objects to deploy"
 
   validation {
     condition = alltrue([
