@@ -1,3 +1,11 @@
+/*
+ * # Module: azure/cosmos-dbs
+ *
+ * Creates one or more of the following Azure Cosmos DB resources from a map of definitions:
+ * - Cosmos DB Account
+ * - Cosmos DB Table
+ */
+ 
 resource "azurerm_cosmosdb_account" "this" {
   for_each = var.cosmos_db_accounts
 
