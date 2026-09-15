@@ -49,9 +49,9 @@ resource "azurerm_cosmosdb_account" "this" {
     each.value.tags
   )
 
-  lifecycle {
-    prevent_destroy = true
-  }
+  # lifecycle {
+  #   prevent_destroy = true
+  # }
 }
 
 resource "azurerm_cosmosdb_table" "this" {
