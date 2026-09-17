@@ -18,27 +18,7 @@ jobs:
       - name: Generate docs for root module
         uses: terraform-docs/gh-actions@main
         with:
-          working-dir: infrastructure/terraform/
+          working-dir: infrastructure/terraform/, infrastructure/terraform/modules/azure, infrastructure/terraform/modules/cloudflare
           output-file: README.md
           output-method: inject
-          git-push: "true"
-
-      - name: Generate docs for Azure modules
-        uses: terraform-docs/gh-actions@main
-        with:
-          working-dir: infrastructure/terraform/
-          recursive: true
-          recursive-path: modules/azure
-          output-file: README.md
-          output-method: replace
-          git-push: "true"
-      
-      - name: Generate docs for Cloudflare modules
-        uses: terraform-docs/gh-actions@main
-        with:
-          working-dir: infrastructure/terraform/
-          recursive: true
-          recursive-path: modules/cloudflare
-          output-file: README.md
-          output-method: replace
           git-push: "true"
