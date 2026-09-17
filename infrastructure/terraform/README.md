@@ -2,7 +2,7 @@
 ## Requirements
 
 | Name | Version |
-| ---- | ------- |
+|------|---------|
 | <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 4.0 |
 | <a name="requirement_cloudflare"></a> [cloudflare](#requirement\_cloudflare) | ~> 5.0 |
 | <a name="requirement_random"></a> [random](#requirement\_random) | ~>3.0 |
@@ -11,13 +11,13 @@
 ## Providers
 
 | Name | Version |
-| ---- | ------- |
+|------|---------|
 | <a name="provider_time"></a> [time](#provider\_time) | 0.14.0 |
 
 ## Modules
 
 | Name | Source | Version |
-| ---- | ------ | ------- |
+|------|--------|---------|
 | <a name="module_cloudflare_dns_records"></a> [cloudflare\_dns\_records](#module\_cloudflare\_dns\_records) | ./modules/cloudflare/cloudflare-dns-records | n/a |
 | <a name="module_cosmos_dbs"></a> [cosmos\_dbs](#module\_cosmos\_dbs) | ./modules/azure/cosmos-dbs | n/a |
 | <a name="module_frontdoors"></a> [frontdoors](#module\_frontdoors) | ./modules/azure/front-doors | n/a |
@@ -30,13 +30,13 @@
 ## Resources
 
 | Name | Type |
-| ---- | ---- |
+|------|------|
 | [time_static.this](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/static) | resource |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-| ---- | ----------- | ---- | ------- | :------: |
+|------|-------------|------|---------|:--------:|
 | <a name="input_cloudflare_api_token"></a> [cloudflare\_api\_token](#input\_cloudflare\_api\_token) | The Cloudflare API Token | `string` | n/a | yes |
 | <a name="input_cloudflare_zone_id"></a> [cloudflare\_zone\_id](#input\_cloudflare\_zone\_id) | The Cloudflare Zone ID that DNS records will be created in | `string` | n/a | yes |
 | <a name="input_cosmos_db_accounts"></a> [cosmos\_db\_accounts](#input\_cosmos\_db\_accounts) | Map of Cosmos DB Account objects to deploy | <pre>map(object({<br/>    # Required attributes<br/>    resource_group_key = string<br/>    name               = string<br/>    offer_type         = string<br/>    geo_locations = map(object({<br/>      failover_priority = number<br/>      location          = string<br/>      zone_redundant    = optional(bool, false)<br/>    }))<br/>    consistency_policy = object({<br/>      consistency_level       = string<br/>      max_interval_in_seconds = optional(number, 5)<br/>      max_staleness_prefix    = optional(number, 100)<br/>    })<br/>    capabilities = map(object({<br/>      name = string<br/>    }))<br/><br/>    # Optional attributes<br/>    tags = optional(map(string), {})<br/>  }))</pre> | n/a | yes |
@@ -60,7 +60,7 @@
 ## Outputs
 
 | Name | Description |
-| ---- | ----------- |
+|------|-------------|
 | <a name="output_cosmos_db_accounts"></a> [cosmos\_db\_accounts](#output\_cosmos\_db\_accounts) | A mapping of keys to cosmos db account names and ids |
 | <a name="output_frontdoor_custom_domain_validation_tokens"></a> [frontdoor\_custom\_domain\_validation\_tokens](#output\_frontdoor\_custom\_domain\_validation\_tokens) | A mapping of keys to front door custom domain TXT validation tokens |
 | <a name="output_frontdoor_endpoint_hostnames"></a> [frontdoor\_endpoint\_hostnames](#output\_frontdoor\_endpoint\_hostnames) | A mapping of keys to front door endpoint host names |
