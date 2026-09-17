@@ -1,3 +1,9 @@
+variable "test_docs_variable" {
+  type        = string
+  description = "Temporary variable to verify terraform-docs picks up changes"
+  default     = "placeholder"
+}
+
 variable "general_tags" {
   type        = map(string)
   description = "A mapping of global tags to assign to all resources"
