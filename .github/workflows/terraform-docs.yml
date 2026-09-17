@@ -23,12 +23,22 @@ jobs:
           output-method: inject
           git-push: "true"
 
-      - name: Generate docs for submodules
+      - name: Generate docs for Azure modules
         uses: terraform-docs/gh-actions@main
         with:
           working-dir: infrastructure/terraform/
           recursive: true
-          recursive-path: modules
+          recursive-path: modules/azure
+          output-file: README.md
+          output-method: replace
+          git-push: "true"
+      
+      - name: Generate docs for Cloudflare modules
+        uses: terraform-docs/gh-actions@main
+        with:
+          working-dir: infrastructure/terraform/
+          recursive: true
+          recursive-path: modules/cloudflare
           output-file: README.md
           output-method: replace
           git-push: "true"
