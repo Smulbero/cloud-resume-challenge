@@ -20,6 +20,4 @@ jobs:
         with:
           find-dir: infrastructure/terraform
           config-file: infrastructure/terraform/.terraform-docs.yml
-          output-file: README.md
-          output-method: inject
           git-push: "true"
