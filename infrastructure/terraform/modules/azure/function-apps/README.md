@@ -13,7 +13,7 @@ No requirements.
 ## Providers
 
 | Name | Version |
-| ---- | ------- |
+|------|---------|
 | <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | n/a |
 
 ## Modules
@@ -23,13 +23,13 @@ No modules.
 ## Resources
 
 | Name | Type |
-| ---- | ---- |
+|------|------|
 | [azurerm_function_app_flex_consumption.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/function_app_flex_consumption) | resource |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-| ---- | ----------- | ---- | ------- | :------: |
+|------|-------------|------|---------|:--------:|
 | <a name="input_frontdoor_endpoints"></a> [frontdoor\_endpoints](#input\_frontdoor\_endpoints) | Map of frontdoor endpoint host names | <pre>map(object({<br/>    host_name = string<br/>  }))</pre> | n/a | yes |
 | <a name="input_frontdoor_profiles"></a> [frontdoor\_profiles](#input\_frontdoor\_profiles) | Map of frontdoor profiles | <pre>map(object({<br/>    id            = string<br/>    resource_guid = string<br/>  }))</pre> | n/a | yes |
 | <a name="input_function_apps"></a> [function\_apps](#input\_function\_apps) | Map of function app objects to deploy | <pre>map(object({<br/>    # Required attributes<br/>    resource_group_key          = string<br/>    storage_account_key         = string<br/>    service_plan_key            = string<br/>    frontdoor_endpoint_key      = string<br/>    frontdoor_profile_key       = string<br/>    name                        = string<br/>    storage_container_type      = optional(string, "blobContainer")<br/>    storage_authentication_type = optional(string, "SystemAssignedIdentity")<br/>    runtime_name                = string<br/>    runtime_version             = number<br/>    site_config = object({<br/>      cors = optional(object({<br/>        allowed_origins = optional(list(string), [])<br/>      }), null)<br/>    })<br/><br/>    # Optional attributes<br/>    app_settings = optional(map(string), {})<br/>    identity = optional(object({<br/>      type = optional(string, "SystemAssigned")<br/>    }), null)<br/>    tags = optional(map(string), {})<br/>  }))</pre> | n/a | yes |
@@ -44,7 +44,7 @@ No modules.
 ## Outputs
 
 | Name | Description |
-| ---- | ----------- |
+|------|-------------|
 | <a name="output_function_app_identities"></a> [function\_app\_identities](#output\_function\_app\_identities) | n/a |
 | <a name="output_function_apps_flex"></a> [function\_apps\_flex](#output\_function\_apps\_flex) | A map containing the full objects of the deployed function apps using flex consumption plan |
 <!-- END_TF_DOCS -->

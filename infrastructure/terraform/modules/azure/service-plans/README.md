@@ -13,7 +13,7 @@ No requirements.
 ## Providers
 
 | Name | Version |
-| ---- | ------- |
+|------|---------|
 | <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | n/a |
 | <a name="provider_random"></a> [random](#provider\_random) | n/a |
 
@@ -24,14 +24,14 @@ No modules.
 ## Resources
 
 | Name | Type |
-| ---- | ---- |
+|------|------|
 | [azurerm_service_plan.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/service_plan) | resource |
 | [random_integer.this](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/integer) | resource |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-| ---- | ----------- | ---- | ------- | :------: |
+|------|-------------|------|---------|:--------:|
 | <a name="input_general_tags"></a> [general\_tags](#input\_general\_tags) | A mapping of global tags to assign to all resources | `map(string)` | <pre>{<br/>  "terraform": true<br/>}</pre> | no |
 | <a name="input_random_integer"></a> [random\_integer](#input\_random\_integer) | Min and Max values for random\_integer k | <pre>object({<br/>    min = number<br/>    max = number<br/>  })</pre> | <pre>{<br/>  "max": 9999,<br/>  "min": 1000<br/>}</pre> | no |
 | <a name="input_resource_groups"></a> [resource\_groups](#input\_resource\_groups) | Map of resource group objects name, and location | <pre>map(object({<br/>    name     = string<br/>    location = string<br/>  }))</pre> | n/a | yes |
@@ -41,7 +41,7 @@ No modules.
 ## Outputs
 
 | Name | Description |
-| ---- | ----------- |
+|------|-------------|
 | <a name="output_ids"></a> [ids](#output\_ids) | A mapping of keys to service plan ids |
 | <a name="output_service_plans"></a> [service\_plans](#output\_service\_plans) | A map containing the full objects of the deployed service plans |
 <!-- END_TF_DOCS -->

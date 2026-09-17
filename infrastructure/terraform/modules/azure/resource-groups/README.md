@@ -13,7 +13,7 @@ No requirements.
 ## Providers
 
 | Name | Version |
-| ---- | ------- |
+|------|---------|
 | <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | n/a |
 
 ## Modules
@@ -23,13 +23,13 @@ No modules.
 ## Resources
 
 | Name | Type |
-| ---- | ---- |
+|------|------|
 | [azurerm_resource_group.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) | resource |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-| ---- | ----------- | ---- | ------- | :------: |
+|------|-------------|------|---------|:--------:|
 | <a name="input_general_tags"></a> [general\_tags](#input\_general\_tags) | A mapping of global tags to assign to all resources | `map(string)` | <pre>{<br/>  "terraform": true<br/>}</pre> | no |
 | <a name="input_resource_groups"></a> [resource\_groups](#input\_resource\_groups) | Map of k group objects to deploy | <pre>map(object({<br/>    location = string<br/>    tags     = optional(map(string), {})<br/>  }))</pre> | n/a | yes |
 | <a name="input_resource_name_prefix"></a> [resource\_name\_prefix](#input\_resource\_name\_prefix) | Prefix value for resources name | `string` | `"rg"` | no |
@@ -37,7 +37,7 @@ No modules.
 ## Outputs
 
 | Name | Description |
-| ---- | ----------- |
+|------|-------------|
 | <a name="output_resource_group_names"></a> [resource\_group\_names](#output\_resource\_group\_names) | A mapping of keys to resource group names |
 | <a name="output_resource_groups"></a> [resource\_groups](#output\_resource\_groups) | A map containing the full objects of the deployed resource groups |
 <!-- END_TF_DOCS -->

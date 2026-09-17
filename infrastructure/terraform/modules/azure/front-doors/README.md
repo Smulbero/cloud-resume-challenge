@@ -21,7 +21,7 @@ No requirements.
 ## Providers
 
 | Name | Version |
-| ---- | ------- |
+|------|---------|
 | <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | n/a |
 | <a name="provider_random"></a> [random](#provider\_random) | n/a |
 
@@ -32,7 +32,7 @@ No modules.
 ## Resources
 
 | Name | Type |
-| ---- | ---- |
+|------|------|
 | [azurerm_cdn_frontdoor_custom_domain.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/cdn_frontdoor_custom_domain) | resource |
 | [azurerm_cdn_frontdoor_endpoint.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/cdn_frontdoor_endpoint) | resource |
 | [azurerm_cdn_frontdoor_firewall_policy.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/cdn_frontdoor_firewall_policy) | resource |
@@ -46,7 +46,7 @@ No modules.
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-| ---- | ----------- | ---- | ------- | :------: |
+|------|-------------|------|---------|:--------:|
 | <a name="input_frontdoor_custom_domains"></a> [frontdoor\_custom\_domains](#input\_frontdoor\_custom\_domains) | Map of front door custom domains to deploy | <pre>map(object({<br/>    name                  = string<br/>    frontdoor_profile_key = string<br/>    host_name             = string<br/>    tls = object({<br/>      certificate_type = optional(string, "ManagedCertificate")<br/>      minimum_version  = optional(string, "TLS12")<br/>    })<br/>  }))</pre> | n/a | yes |
 | <a name="input_frontdoor_endpoints"></a> [frontdoor\_endpoints](#input\_frontdoor\_endpoints) | Map of front door endpoints to deploy | <pre>map(object({<br/>    # Required attributes<br/>    frontdoor_profile_key = string<br/>    name                  = string<br/><br/>    # Optional attributes<br/>    enabled = optional(bool, true)<br/>    tags    = optional(map(string), {})<br/>  }))</pre> | n/a | yes |
 | <a name="input_frontdoor_firewall_policies"></a> [frontdoor\_firewall\_policies](#input\_frontdoor\_firewall\_policies) | Map of front door WAF firewall policies to deploy | <pre>map(object({<br/>    # Required attributes<br/>    name                  = string<br/>    resource_group_key    = string<br/>    frontdoor_profile_key = string<br/>    mode                  = string<br/><br/>    # Optional attributes<br/>    custom_rules = map(object({<br/>      # Required attributes<br/>      name   = string<br/>      action = string<br/>      type   = string<br/>      # Optional attributes<br/>      priority                       = optional(number, 1)<br/>      enabled                        = optional(bool, true)<br/>      rate_limit_duration_in_minutes = optional(number, 1)<br/>      rate_limit_threshold           = optional(number, 10)<br/>      match_conditions = map(object({<br/>        # Required attributes<br/>        match_variable = string<br/>        match_values   = list(string)<br/>        operator       = string<br/>        # Optional attributes<br/>        selector           = optional(string, null)<br/>        negation_condition = optional(bool, false)<br/>        transforms         = optional(list(string), null)<br/>      }))<br/>    }))<br/>  }))</pre> | n/a | yes |
@@ -64,7 +64,7 @@ No modules.
 ## Outputs
 
 | Name | Description |
-| ---- | ----------- |
+|------|-------------|
 | <a name="output_frontdoor_custom_domain_validation_tokens"></a> [frontdoor\_custom\_domain\_validation\_tokens](#output\_frontdoor\_custom\_domain\_validation\_tokens) | n/a |
 | <a name="output_frontdoor_custom_domains"></a> [frontdoor\_custom\_domains](#output\_frontdoor\_custom\_domains) | A map containing the full objects of the deployed Azure Front Door custom domains |
 | <a name="output_frontdoor_endpoint_hostnames"></a> [frontdoor\_endpoint\_hostnames](#output\_frontdoor\_endpoint\_hostnames) | n/a |
