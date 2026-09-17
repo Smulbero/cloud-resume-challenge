@@ -15,10 +15,10 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
 
-      - name: Generate docs for root module
+      - name: Generate docs for root module and submodules
         uses: terraform-docs/gh-actions@main
         with:
-          working-dir: infrastructure/terraform/, infrastructure/terraform/modules/azure, infrastructure/terraform/modules/cloudflare
+          find-dir: infrastructure/terraform
           output-file: README.md
           output-method: inject
           git-push: "true"
