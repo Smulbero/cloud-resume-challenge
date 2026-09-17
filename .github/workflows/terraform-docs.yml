@@ -1,9 +1,7 @@
 name: Generate terraform docs
 
 on:
-  push:
-    branches:
-      - terraform
+  pull_request:
     paths:
       - "infrastructure/terraform/**/*.tf"
 
@@ -17,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: terraform
+          ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Generate Terraform documentation
         uses: terraform-docs/gh-actions@v1.4.1
