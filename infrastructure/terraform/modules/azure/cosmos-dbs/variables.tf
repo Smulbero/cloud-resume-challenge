@@ -1,7 +1,7 @@
 variable "test_docs_variable" {
   type        = string
   description = "Temporary variable to verify terraform-docs picks up changes"
-  default     = "placeholder 123"
+  default     = "placeholder"
 }
 
 variable "general_tags" {
