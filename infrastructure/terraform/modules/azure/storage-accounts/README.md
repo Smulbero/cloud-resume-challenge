@@ -17,7 +17,7 @@ No requirements.
 ## Providers
 
 | Name | Version |
-| ---- | ------- |
+|------|---------|
 | <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | n/a |
 | <a name="provider_random"></a> [random](#provider\_random) | n/a |
 
@@ -28,7 +28,7 @@ No modules.
 ## Resources
 
 | Name | Type |
-| ---- | ---- |
+|------|------|
 | [azurerm_storage_account.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account) | resource |
 | [azurerm_storage_account_static_website.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account_static_website) | resource |
 | [azurerm_storage_container.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_container) | resource |
@@ -37,7 +37,7 @@ No modules.
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-| ---- | ----------- | ---- | ------- | :------: |
+|------|-------------|------|---------|:--------:|
 | <a name="input_general_tags"></a> [general\_tags](#input\_general\_tags) | A mapping of global tags to assign to all resources | `map(string)` | <pre>{<br/>  "terraform": true<br/>}</pre> | no |
 | <a name="input_random_integer"></a> [random\_integer](#input\_random\_integer) | Min and Max values for random\_integer k | <pre>object({<br/>    min = number<br/>    max = number<br/>  })</pre> | <pre>{<br/>  "max": 9999,<br/>  "min": 1000<br/>}</pre> | no |
 | <a name="input_resource_groups"></a> [resource\_groups](#input\_resource\_groups) | Map of resource group objects name, and location | <pre>map(object({<br/>    name     = string<br/>    location = string<br/>  }))</pre> | n/a | yes |
@@ -49,7 +49,7 @@ No modules.
 ## Outputs
 
 | Name | Description |
-| ---- | ----------- |
+|------|-------------|
 | <a name="output_names"></a> [names](#output\_names) | A mapping of keys to storage account names |
 | <a name="output_storage_accounts"></a> [storage\_accounts](#output\_storage\_accounts) | A map containing the full objects of the deployed storage accounts |
 | <a name="output_storage_containers"></a> [storage\_containers](#output\_storage\_containers) | A map containing the full objects of the deployed storage containers |
