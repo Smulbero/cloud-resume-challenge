@@ -15,7 +15,15 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
 
-      - name: Generate terraform docs
+      - name: Generate docs for root module
+        uses: terraform-docs/gh-actions@main
+        with:
+          working-dir: infrastructure/terraform/
+          output-file: README.md
+          output-method: inject
+          git-push: "true"
+
+      - name: Generate docs for submodules
         uses: terraform-docs/gh-actions@main
         with:
           working-dir: infrastructure/terraform/
