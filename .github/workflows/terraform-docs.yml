@@ -28,7 +28,7 @@ jobs:
         with:
           working-dir: infrastructure/terraform/
           recursive: true
-          recursive-path: modules/**
+          recursive-path: modules
           output-file: README.md
-          output-method: inject
+          output-method: replace
           git-push: "true"
