@@ -23,5 +23,5 @@ jobs:
         uses: terraform-docs/gh-actions@v1.4.1
         with:
           find-dir: infrastructure/terraform
-          config-file: .terraform-docs.yml
+          config-file: ${{ github.workspace }}/infrastructure/terraform/.terraform-docs.yml
           git-push: true
