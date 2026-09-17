@@ -1,8 +1,11 @@
 name: Generate terraform docs
+
 on:
-  pull_request:
+  push:
+    branches:
+      - terraform
     paths:
-      - 'infrastructure/terraform/**/*.tf'
+      - "infrastructure/terraform/**/*.tf"
 
 permissions:
   contents: write
@@ -10,17 +13,15 @@ permissions:
 jobs:
   docs:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.ref }}
+          ref: terraform
 
-      - name: Generate docs for root module and submodules
-        uses: terraform-docs/gh-actions@main
+      - name: Generate Terraform documentation
+        uses: terraform-docs/gh-actions@v1.4.1
         with:
           find-dir: infrastructure/terraform
-          config-file: infrastructure/terraform/.terraform-docs.yml
-          output-file: ""
-          output-method: ""
-          template: ""
-          git-push: "true"
+          config-file: .terraform-docs.yml
+          git-push: true
