@@ -19,6 +19,8 @@ jobs:
         uses: terraform-docs/gh-actions@main
         with:
           find-dir: infrastructure/terraform
-          output-file: README.md
-          output-method: inject
+          config-file: infrastructure/terraform/.terraform-docs.yml
+          output-file: ""
+          output-method: ""
+          template: ""
           git-push: "true"
