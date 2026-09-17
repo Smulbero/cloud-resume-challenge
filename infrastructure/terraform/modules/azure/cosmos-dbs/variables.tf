@@ -1,7 +1,3 @@
-variable "workflow_test" {
-  
-}
-
 variable "general_tags" {
   type        = map(string)
   description = "A mapping of global tags to assign to all resources"
