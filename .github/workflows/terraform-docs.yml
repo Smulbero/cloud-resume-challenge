@@ -2,6 +2,8 @@ name: Generate terraform docs
 
 on:
   pull_request:
+    branches:
+      - main
     paths:
       - "infrastructure/terraform/**/*.tf"
 
@@ -13,7 +15,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.ref }}
 
