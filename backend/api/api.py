@@ -52,4 +52,4 @@ def visitor_count(req: func.HttpRequest) -> func.HttpResponse:
             status_code=500
         )
 
-# Test visitor-counter-api workflow
+# Test visitor-counter-api workflow.
