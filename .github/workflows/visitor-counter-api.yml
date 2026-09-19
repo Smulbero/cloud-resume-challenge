@@ -21,7 +21,10 @@ jobs:
           python-version: "3.14"
 
       - name: Install dependencies
-        run: pip install -r ${{ github.workspace }}/backend/api/requirements-test.txt
+        run: | 
+          pip install -r ${{ github.workspace }}/backend/api/requirements.txt
+          pip install -r ${{ github.workspace }}/backend/api/requirements-test.txt      
       
       - name: Run the tests
-        run: pytest ${{ github.workspace }}/backend/api/tests/test_visitor_counter.py
+        run: | 
+          pytest ${{ github.workspace }}/backend/api/tests/test_visitor_counter.py
