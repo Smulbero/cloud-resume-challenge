@@ -34,6 +34,9 @@ variable "storage_accounts" {
     # Optional attributes
     account_kind = optional(string, "Storage")
     access_tier  = optional(string, "Hot")
+    blob_properties = object({
+      versioning_enabled = optional(bool, false)
+    })
     tags         = optional(map(string), {})
   }))
   description = "Map of storage account objects to deploy"
@@ -115,6 +118,7 @@ variable "cosmos_db_accounts" {
   type = map(object({
     # Required attributes
     resource_group_key = string
+    function_app_key   = string
     name               = string
     offer_type         = string
     geo_locations = map(object({

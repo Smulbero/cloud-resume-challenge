@@ -18,11 +18,17 @@ terraform {
     }
   }
   backend "azurerm" {
+    use_azuread_auth = true
+    resource_group_name  = "rg-cloudresumechallenge"
+    storage_account_name = "tfstate19524"
+    container_name       = "tfstate"
+    key                  = "terraform.tfstate"
   }
 }
 
 provider "azurerm" {
-  features {}
+  features {}  
+  storage_use_azuread = true
 }
 
 provider "cloudflare" {

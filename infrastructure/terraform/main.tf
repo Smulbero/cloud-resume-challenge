@@ -41,11 +41,12 @@ module "service_plans" {
 # Cosmos DBs
 # ==================================================
 module "cosmos_dbs" {
-  source             = "./modules/azure/cosmos-dbs"
-  resource_groups    = module.resource_groups.resource_groups
-  cosmos_db_accounts = var.cosmos_db_accounts
-  cosmos_db_tables   = var.cosmos_db_tables
-  general_tags       = local.general_tags
+  source                         = "./modules/azure/cosmos-dbs"
+  resource_groups                = module.resource_groups.resource_groups
+  function_app_ip_addresses_list = module.function_apps.function_app_ip_addresses_list
+  cosmos_db_accounts             = var.cosmos_db_accounts
+  cosmos_db_tables               = var.cosmos_db_tables
+  general_tags                   = local.general_tags
 }
 
 # ==================================================
