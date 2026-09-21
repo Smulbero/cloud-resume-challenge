@@ -32,6 +32,7 @@ override.tf.json
 # Include tfplan files to ignore the plan output of command: terraform plan -out=tfplan
 *tfplan*
 *.plan*
+*/terraform/*.json
 
 # Ignore CLI configuration files
 .terraformrc
@@ -60,3 +61,4 @@ __queuestorage__/
 __pycache__/
 *.pyc
 .pytest_cache/
+
