@@ -46,5 +46,6 @@ No modules.
 | Name | Description |
 |------|-------------|
 | <a name="output_function_app_identities"></a> [function\_app\_identities](#output\_function\_app\_identities) | n/a |
+| <a name="output_function_app_ip_addresses_list"></a> [function\_app\_ip\_addresses\_list](#output\_function\_app\_ip\_addresses\_list) | n/a |
 | <a name="output_function_apps_flex"></a> [function\_apps\_flex](#output\_function\_apps\_flex) | A map containing the full objects of the deployed function apps using flex consumption plan |
 <!-- END_TF_DOCS -->
