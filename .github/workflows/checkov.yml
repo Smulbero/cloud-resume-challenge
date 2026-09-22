@@ -56,5 +56,4 @@ jobs:
         with:
           file: infrastructure/terraform/checkov.json
           framework: terraform_plan
-          repo_root_for_plan_enrichment: infrastructure/terraform
-          deep_analysis: true
+          repo_root_for_plan_enrichment: infrastructure/terraform          
