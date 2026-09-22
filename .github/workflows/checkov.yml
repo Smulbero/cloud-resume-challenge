@@ -56,4 +56,11 @@ jobs:
         with:
           file: infrastructure/terraform/checkov.json
           framework: terraform_plan
-          repo_root_for_plan_enrichment: infrastructure/terraform          
+          repo_root_for_plan_enrichment: infrastructure/terraform
+          output_format: sarif
+          output_file_path: checkov.sarif
+
+      - name: Upload SARIF (Checkov)
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: checkov.sarif
