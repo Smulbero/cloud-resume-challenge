@@ -23,8 +23,8 @@ variable "random_integer" {
   description = "Min and Max values for random_integer k"
 
   default = {
-    min = 1000
-    max = 9999
+    min = 10000
+    max = 99999
   }
 
   validation {
@@ -44,10 +44,16 @@ variable "resource_name_prefix" {
   }
 }
 
+variable "function_app_ip_addresses_list" {
+  type        = map(list(string))
+  description = "Map of function app ip addresses as list"
+}
+
 variable "cosmos_db_accounts" {
   type = map(object({
     # Required attributes
     resource_group_key = string
+    function_app_key   = string
     name               = string
     offer_type         = string
     geo_locations = map(object({

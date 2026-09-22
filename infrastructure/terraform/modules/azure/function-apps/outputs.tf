@@ -11,3 +11,9 @@ output "function_app_identities" {
     }
   }
 }
+
+output "function_app_ip_addresses_list" {
+  value = {
+    for k, v in azurerm_function_app_flex_consumption.this : k => v.outbound_ip_address_list
+  }
+}

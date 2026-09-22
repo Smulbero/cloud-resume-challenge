@@ -26,14 +26,14 @@ No modules.
 | Name | Type |
 |------|------|
 | [azurerm_service_plan.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/service_plan) | resource |
-| [random_integer.this](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/integer) | resource |
+| [random_integer.service_plan](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/integer) | resource |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_general_tags"></a> [general\_tags](#input\_general\_tags) | A mapping of global tags to assign to all resources | `map(string)` | <pre>{<br/>  "terraform": true<br/>}</pre> | no |
-| <a name="input_random_integer"></a> [random\_integer](#input\_random\_integer) | Min and Max values for random\_integer k | <pre>object({<br/>    min = number<br/>    max = number<br/>  })</pre> | <pre>{<br/>  "max": 9999,<br/>  "min": 1000<br/>}</pre> | no |
+| <a name="input_random_integer"></a> [random\_integer](#input\_random\_integer) | Min and Max values for random\_integer k | <pre>object({<br/>    min = number<br/>    max = number<br/>  })</pre> | <pre>{<br/>  "max": 99999,<br/>  "min": 10000<br/>}</pre> | no |
 | <a name="input_resource_groups"></a> [resource\_groups](#input\_resource\_groups) | Map of resource group objects name, and location | <pre>map(object({<br/>    name     = string<br/>    location = string<br/>  }))</pre> | n/a | yes |
 | <a name="input_resource_name_prefix"></a> [resource\_name\_prefix](#input\_resource\_name\_prefix) | Prefix value for resources name | `string` | `"sp"` | no |
 | <a name="input_service_plans"></a> [service\_plans](#input\_service\_plans) | Map of service plan objects to deploy | <pre>map(object({<br/>    # Required attributes<br/>    resource_group_key = string<br/>    name               = string<br/>    os_type            = string<br/>    sku_name           = string<br/><br/>    # Optional attributes<br/>    tags = optional(map(string), {})<br/>  }))</pre> | n/a | yes |

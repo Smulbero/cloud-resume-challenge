@@ -5,7 +5,7 @@
  * - Cosmos DB Account
  * - Cosmos DB Table
  */
- 
+
 resource "azurerm_cosmosdb_account" "this" {
   for_each = var.cosmos_db_accounts
 
@@ -37,6 +37,7 @@ resource "azurerm_cosmosdb_account" "this" {
   }
 
   # Optional attributes
+  ip_range_filter = var.function_app_ip_addresses_list[each.value.function_app_key]
   dynamic "capabilities" {
     for_each = each.value.capabilities
 
@@ -52,6 +53,13 @@ resource "azurerm_cosmosdb_account" "this" {
   lifecycle {
     prevent_destroy = true
   }
+
+  # Address checkov issues
+  public_network_access_enabled = false # Restrict access and disable public network access.
+  access_key_metadata_writes_enabled = false # Prevent metadata writes via account keys. Managed Identites with RBAC are used. Reference ADR #0007.
+
+  # checkov:skip=CKV_AZURE_100:CMKs would require an Azure Key Vault resource which has been decided not to provision. Reference ADR #0007.
+  # checkov:skip=CKV_AZURE_140:Check is done against ´local_authentication_disabled´ property which is deprecated. ´local_authentication_enabled´ is used instead. The property targets only SQL API per azurerm provider docs. This project uses the Table API. Reference ADR #0006.
 }
 
 resource "azurerm_cosmosdb_table" "this" {

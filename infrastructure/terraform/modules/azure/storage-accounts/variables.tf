@@ -23,8 +23,8 @@ variable "random_integer" {
   description = "Min and Max values for random_integer k"
 
   default = {
-    min = 1000
-    max = 9999
+    min = 10000
+    max = 99999
   }
 
   validation {
@@ -55,6 +55,9 @@ variable "storage_accounts" {
     # Optional attributes
     account_kind = optional(string, "Storage")
     access_tier  = optional(string, "Hot")
+    blob_properties = object({
+      versioning_enabled = optional(bool, false)
+    })
     tags         = optional(map(string), {})
   }))
   description = "Map of storage account objects to deploy"
