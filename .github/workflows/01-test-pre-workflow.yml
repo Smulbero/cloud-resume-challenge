@@ -1,4 +1,4 @@
-name: Test pre workflow 
+name: Test pre workflow
 
 on:
   workflow_dispatch:
