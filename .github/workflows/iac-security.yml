@@ -6,6 +6,13 @@ on:
       - main
     paths:
       - "infrastructure/terraform/**/*.tf"
+      - "infrastructure/terraform/**/*.tfvars"
+  push:
+    branches: 
+      - main
+    paths: 
+      - "infrastructure/terraform/**/*.tf"
+      - "infrastructure/terraform/**/*.tfvars"
 
 permissions:
   id-token: write
