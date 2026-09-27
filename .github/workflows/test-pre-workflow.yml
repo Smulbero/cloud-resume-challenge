@@ -1,0 +1,13 @@
+name: Test pre workflow 
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Test pre workflow
+        run: |          
+          echo "Pre workflow ran"
