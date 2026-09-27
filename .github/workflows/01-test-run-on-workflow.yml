@@ -3,7 +3,7 @@ name: Test workflow
 on:
   workflow_run:
     workflows:
-      - "Test pre workflow "
+      - "Test pre workflow"
     types:
       - completed
 
