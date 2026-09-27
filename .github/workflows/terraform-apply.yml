@@ -2,12 +2,10 @@ name: Terraform apply
 
 on:
   workflow_run:
-    workflows: 
+    workflows:
       - "IaC Security (tfsec + checkov)"
     types:
       - completed
-    branches:
-      - main
       
 jobs:
   tfapply:
