@@ -1,6 +1,7 @@
 name: IaC Security (tfsec + checkov)
 
 on:
+  workflow_dispatch:
   pull_request:
     branches:
       - main
