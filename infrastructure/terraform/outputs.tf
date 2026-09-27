@@ -37,11 +37,6 @@ output "function_apps_flex" {
   }
 }
 
-output "frontdoor_custom_domain_validation_tokens" {
-  description = "A mapping of keys to front door custom domain TXT validation tokens"
-  value       = module.frontdoors.frontdoor_custom_domain_validation_tokens
-}
-
 output "frontdoor_endpoint_hostnames" {
   description = "A mapping of keys to front door endpoint host names"
   value       = module.frontdoors.frontdoor_endpoint_hostnames
