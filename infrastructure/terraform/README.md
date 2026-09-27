@@ -62,7 +62,6 @@
 | Name | Description |
 |------|-------------|
 | <a name="output_cosmos_db_accounts"></a> [cosmos\_db\_accounts](#output\_cosmos\_db\_accounts) | A mapping of keys to cosmos db account names and ids |
-| <a name="output_frontdoor_custom_domain_validation_tokens"></a> [frontdoor\_custom\_domain\_validation\_tokens](#output\_frontdoor\_custom\_domain\_validation\_tokens) | A mapping of keys to front door custom domain TXT validation tokens |
 | <a name="output_frontdoor_endpoint_hostnames"></a> [frontdoor\_endpoint\_hostnames](#output\_frontdoor\_endpoint\_hostnames) | A mapping of keys to front door endpoint host names |
 | <a name="output_frontdoor_origins"></a> [frontdoor\_origins](#output\_frontdoor\_origins) | A mapping of keys to front door origin names and host names |
 | <a name="output_function_apps_flex"></a> [function\_apps\_flex](#output\_function\_apps\_flex) | A mapping of keys to flex consumption function app names and their managed identity principal ids |
