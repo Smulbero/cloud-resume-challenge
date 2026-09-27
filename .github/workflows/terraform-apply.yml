@@ -3,7 +3,7 @@ name: Terraform apply
 on:
   workflow_run:
     workflows:
-      - "IaC Security (tfsec + checkov)"
+      - "Test pre workflow"
     types:
       - completed
       
