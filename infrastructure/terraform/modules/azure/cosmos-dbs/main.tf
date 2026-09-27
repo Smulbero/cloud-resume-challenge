@@ -50,9 +50,9 @@ resource "azurerm_cosmosdb_account" "this" {
     each.value.tags
   )
 
-  lifecycle {
-    prevent_destroy = true
-  }
+  # lifecycle {
+  #   prevent_destroy = true
+  # }
 
   # Address checkov issues
   public_network_access_enabled = false # Restrict access and disable public network access.
