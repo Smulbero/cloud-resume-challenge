@@ -4,10 +4,18 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
+  test_job_one:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Test pre workflow
+      - name: Test Job One
         run: |          
-          echo "Pre workflow ran"
+          echo "Job one"
+          
+  test_job_two:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Test Job Two
+        run: |          
+          echo "Job Two"
