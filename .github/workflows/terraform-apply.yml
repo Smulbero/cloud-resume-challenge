@@ -12,7 +12,6 @@ on:
 permissions:
   id-token: write
   contents: read
-  security-events: write
       
 jobs:
   terraform:
@@ -20,9 +19,7 @@ jobs:
      
     name: terraform apply
     runs-on: ubuntu-latest
-
-    environment: 
-      name: production
+    environment: production
 
     env:
       TF_VAR_cloudflare_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
