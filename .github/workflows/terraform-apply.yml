@@ -13,11 +13,14 @@ permissions:
   security-events: write
       
 jobs:
-  tfapply:
+  terraform:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
      
     name: terraform apply
     runs-on: ubuntu-latest
+
+    environment: 
+      name: production
 
     env:
       TF_VAR_cloudflare_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -52,5 +55,6 @@ jobs:
       - name: Terraform Plan
         run: terraform plan -input=false -out=deploy.tfplan
       
-      # - name: Terraform Apply
-      #   run: terraform apply deploy.tfplan
+      - name: Terraform Apply
+        run: echo "terraform apply"
+        # run: terraform apply deploy.tfplan
