@@ -6,6 +6,8 @@ on:
       - "IaC Security"
     types:
       - completed
+    branches: 
+      - main
       
 permissions:
   id-token: write
