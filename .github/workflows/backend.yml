@@ -41,7 +41,7 @@ jobs:
       - name: Get Resource Group Name From Terraform
         working-directory: ./infrastructure/terraform
         run: |
-          resource_group_name=$(terraform output -json resource_groups | jq -r ".project.name")
+          resource_group_name=$(terraform output -json resource_groups | jq -r ".cloudresumechallenge.name")
           echo "RESOURCE_GROUP_NAME=$resource_group_name" >> $GITHUB_ENV
 
       - name: Get Function App Name From Terraform
