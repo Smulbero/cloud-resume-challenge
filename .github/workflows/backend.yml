@@ -1,4 +1,4 @@
-name: Upload Frontend Files to Azure
+name: Upload Backend Files to Azure
 
 on:
   # Dispatch for testing purposes
@@ -7,7 +7,7 @@ on:
     branches: 
       - main
     paths: 
-      - "frontend/**"
+      - "backend/api/**"
 
 permissions:
   id-token: write
@@ -38,19 +38,34 @@ jobs:
         working-directory: ./infrastructure/terraform
         run: terraform init -input=false
 
-      - name: Get Storage Account Name From Terraform
+      - name: Get Resource Group Name From Terraform
         working-directory: ./infrastructure/terraform
         run: |
-          storage_account_name=$(terraform output -json storage_accounts | jq -r ".frontend.name")
-          echo "STORAGE_ACCOUNT_NAME=$storage_account_name" >> $GITHUB_ENV
+          resource_group_name=$(terraform output -json resource_groups | jq -r ".project.name")
+          echo "RESOURCE_GROUP_NAME=$resource_group_name" >> $GITHUB_ENV
 
+      - name: Get Function App Name From Terraform
+        working-directory: ./infrastructure/terraform
+        run: |
+          function_app_name=$(terraform output -json function_apps_flex | jq -r ".backend.name")
+          echo "FUNCTION_APP_NAME=$function_app_name" >> $GITHUB_ENV
+
+      - name: Zip the Deployment Files
+        working-directory: ./backend/api
+        run: |
+          zip -r ../deployment.zip . -x \
+          tests/* \
+          requirements-test.txt \
+          .funcignore \
+          pytest.ini
+      
       - name: Azure CLI script
         uses: azure/cli@v2
         with:
           azcliversion: latest
           inlineScript: |
-            az storage blob sync \
-            --account-name $STORAGE_ACCOUNT_NAME \
-            --container '$web' \
-            --source ./frontend \
-            --auth-mode login
+            az functionapp deploy \
+            --resource-group $RESOURCE_GROUP_NAME \
+            --name $FUNCTION_APP_NAME \
+            --src-path "./backend/deployment.zip" \
+            --type zip
