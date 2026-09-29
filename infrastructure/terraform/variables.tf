@@ -32,7 +32,7 @@ variable "storage_accounts" {
     account_replication_type = string
 
     # Optional attributes
-    account_kind = optional(string, "Storage")
+    account_kind = optional(string, "StorageV2")
     access_tier  = optional(string, "Hot")
     blob_properties = object({
       versioning_enabled = optional(bool, false)
