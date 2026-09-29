@@ -19,7 +19,7 @@ storage_accounts = {
     account_kind             = "StorageV2"
     blob_properties = {}
   },
-  visitorcounter = {
+  backend = {
     resource_group_key       = "cloudresumechallenge"
     name                     = "crcfuncapp"
     account_tier             = "Standard"
@@ -47,8 +47,8 @@ storage_account_static_websites = {
 }
 
 storage_account_containers = {
-  visitorcounter = {
-    storage_account_key   = "visitorcounter"
+  backend = {
+    storage_account_key   = "backend"
     name                  = "facontainer"
     container_access_type = "private"
   },
@@ -63,7 +63,7 @@ storage_account_containers = {
 # Service Plans
 # ==================================================
 service_plans = {
-  visitorcounter = {
+  backend = {
     resource_group_key = "cloudresumechallenge"
     name               = "fa-visitorcounter"
     os_type            = "Linux"
@@ -75,10 +75,10 @@ service_plans = {
 # Function Apps
 # ==================================================
 function_apps = {
-  visitorcounter = {
+  backend = {
     resource_group_key     = "cloudresumechallenge"
-    storage_account_key    = "visitorcounter"
-    service_plan_key       = "visitorcounter"
+    storage_account_key    = "backend"
+    service_plan_key       = "backend"
     frontdoor_endpoint_key = "cloudresumechallenge"
     frontdoor_profile_key  = "cloudresumechallenge"
     name                   = "visitorcounter"
@@ -108,7 +108,7 @@ function_apps = {
 cosmos_db_accounts = {
   crccdbaccount = {
     resource_group_key = "cloudresumechallenge"
-    function_app_key   = "visitorcounter"
+    function_app_key   = "backend"
     name               = "cdb-crc-account"
     offer_type         = "Standard"
     geo_locations = {
