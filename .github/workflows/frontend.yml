@@ -35,11 +35,11 @@ jobs:
           terraform_version: "1.15.7"
       
       - name: Terraform Init
-        working-directory: ./infrastructure/terrafor
+        working-directory: ./infrastructure/terraform
         run: terraform init -input=false
 
-      - name: Get Storage Account Name
-        working-directory: ./infrastructure/terrafor
+      - name: Get Storage Account Name From Terraform
+        working-directory: ./infrastructure/terraform
         run: |
           storage_account_name=$(terraform output -json storage_accounts | jq -r ".frontend.name")
           echo "STORAGE_ACCOUNT_NAME=$storage_account_name" >> $GITHUB_ENV
