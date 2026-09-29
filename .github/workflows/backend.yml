@@ -64,8 +64,8 @@ jobs:
         with:
           azcliversion: latest
           inlineScript: |
-            az functionapp deploy \
+            az functionapp deployment source config-zip \
             --resource-group $RESOURCE_GROUP_NAME \
             --name $FUNCTION_APP_NAME \
             --src-path "./backend/deployment.zip" \
-            --type zip
+            --build-remote true
