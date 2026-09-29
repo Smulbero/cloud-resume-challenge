@@ -55,5 +55,4 @@ jobs:
         run: terraform plan -input=false -out=deploy.tfplan
       
       - name: Terraform Apply
-        run: echo "terraform apply"
-        # run: terraform apply deploy.tfplan
+        run: terraform apply deploy.tfplan
