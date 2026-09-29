@@ -1,14 +1,13 @@
 #!/bin/bash
 API_VERSION="2024-08-15"
+FA_KEY="backend"
+CDB_ACCOUNT_KEY="crccdbaccount"
 # ==================================================
 # Get necessary resource ids
 # ==================================================
-read -p "Function App key used for Terraform: " fa_key
-read -p "Cosmos DB Account key used for Terraform: " cdb_key
 echo "Getting resource ids.."
-function_app_principal_id=$(terraform output -json function_apps_flex | jq -r ".$fa_key.principal_id")
-cosmos_db_account_id=$(terraform output -json cosmos_db_accounts | jq -r ".$cdb_key.id")
-
+function_app_principal_id=$(terraform output -json function_apps_flex | jq -r ".$FA_KEY.principal_id")
+cosmos_db_account_id=$(terraform output -json cosmos_db_accounts | jq -r ".$CDB_ACCOUNT_KEY.id")
 
 cosmos_db_data_reader_id=$(az rest \
   --method "GET" \
