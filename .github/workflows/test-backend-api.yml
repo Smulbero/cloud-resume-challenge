@@ -1,4 +1,4 @@
-name: Test the visitor counter API
+name: Test the Backend API
 
 on:
   pull_request:
