@@ -1,4 +1,4 @@
-import api
+import function_app
 from api import ResourceNotFoundError
 from unittest.mock import patch, MagicMock
 import pytest
