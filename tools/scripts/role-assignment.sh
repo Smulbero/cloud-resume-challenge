@@ -1,13 +1,14 @@
 #!/bin/bash
 API_VERSION="2024-08-15"
-FA_KEY="backend"
-CDB_ACCOUNT_KEY="crccdbaccount"
+RG_NAME="rg-cloudresumechallenge"
+FA_NAME="fa-visitorcounter"
+CDB_ACCOUNT_NAME="cdb-crc-account"
 # ==================================================
 # Get necessary resource ids
 # ==================================================
 echo "Getting resource ids.."
-function_app_principal_id=$(terraform output -json function_apps_flex | jq -r ".$FA_KEY.principal_id")
-cosmos_db_account_id=$(terraform output -json cosmos_db_accounts | jq -r ".$CDB_ACCOUNT_KEY.id")
+function_app_principal_id=$(az functionapp show --resource-group $RG_NAME --name $FA_NAME --query "identity.principalId" --output tsv)
+cosmos_db_account_id=$(az cosmosdb show --resource-group $RG_NAME --name $CDB_ACCOUNT_NAME --query "id" --output tsv)
 
 cosmos_db_data_reader_id=$(az rest \
   --method "GET" \
