@@ -149,7 +149,7 @@ variable "cosmos_db_tables" {
     name                 = string
 
     # Optional attributes
-    throughput = optional(number, 400)
+    throughput = optional(number, null)
   }))
   description = "Map of Cosmos DB objects to deploy"
 }

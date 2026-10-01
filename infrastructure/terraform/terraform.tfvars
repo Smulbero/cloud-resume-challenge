@@ -123,6 +123,9 @@ cosmos_db_accounts = {
     capabilities = {
       table = {
         name = "EnableTable"
+      },
+      serverless = {
+        name = "EnableServerless"
       }
     }
   }

@@ -136,8 +136,8 @@ variable "cosmos_db_tables" {
 
   validation {
     condition = alltrue([
-      for k in var.cosmos_db_tables :
-      k.throughput >= 400 && k.throughput <= 1000000
+      for k in var.cosmos_db_tables :      
+      k.throughput == null || k.throughput >= 400 && k.throughput <= 1000000
     ])
     error_message = "Cosmos db manual throughput should be equal to or greater than 400 and less than or equal to 1000000."
   }
@@ -145,7 +145,7 @@ variable "cosmos_db_tables" {
   validation {
     condition = alltrue([
       for k in var.cosmos_db_tables :
-      k.throughput % 100 == 0
+      k.throughput == null || k.throughput % 100 == 0
     ])
     error_message = "Cosmos db throughput should be in increments of 100."
   }
