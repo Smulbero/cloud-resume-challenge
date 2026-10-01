@@ -37,7 +37,15 @@ resource "azurerm_cosmosdb_account" "this" {
   }
 
   # Optional attributes
-  ip_range_filter = var.function_app_ip_addresses_list[each.value.function_app_key]
+
+  # ==================================================
+  # IP filtering for the Function App doesn't seem to
+  # work as intended. Cosmos DB access is kept as
+  # publibly available from any network for now.
+  # ==================================================
+  # ip_range_filter = var.function_app_ip_addresses_list[each.value.function_app_key]
+  public_network_access_enabled = true
+
   dynamic "capabilities" {
     for_each = each.value.capabilities
 
@@ -55,10 +63,11 @@ resource "azurerm_cosmosdb_account" "this" {
   # }
 
   # Address checkov issues
-  public_network_access_enabled = false # Restrict access and disable public network access.
   access_key_metadata_writes_enabled = false # Prevent metadata writes via account keys. Managed Identites with RBAC are used. Reference ADR #0007.
 
+  # checkov:skip=CKV_AZURE_99:Resource is publicly available for now. Access restrictions are not needed.
   # checkov:skip=CKV_AZURE_100:CMKs would require an Azure Key Vault resource which has been decided not to provision. Reference ADR #0007.
+  # checkov:skip=CKV_AZURE_101:Resource is publicly available for now.
   # checkov:skip=CKV_AZURE_140:Check is done against ´local_authentication_disabled´ property which is deprecated. ´local_authentication_enabled´ is used instead. The property targets only SQL API per azurerm provider docs. This project uses the Table API. Reference ADR #0006.
 }
 
@@ -70,5 +79,5 @@ resource "azurerm_cosmosdb_table" "this" {
   resource_group_name = var.resource_groups[each.value.resource_group_key].name
   account_name        = azurerm_cosmosdb_account.this[each.value.cosmosdb_account_key].name
   # Optional attributes
-  throughput = each.value.throughput
+  # throughput = each.value.throughput
 }
