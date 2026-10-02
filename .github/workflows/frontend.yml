@@ -1,8 +1,6 @@
 name: Upload Frontend Files to Azure
 
 on:
-  # Dispatch for testing purposes
-  workflow_dispatch:
   push:
     branches: 
       - main
@@ -14,9 +12,17 @@ permissions:
   contents: read
 
 jobs:
-  deploy:
+  terraform:
     runs-on: ubuntu-latest
-    environment: production
+    defaults:
+      run:
+        working-directory: ./infrastructure/terraform
+    outputs:
+      RESOURCE_GROUP_NAME: ${{ steps.extract.outputs.RESOURCE_GROUP_NAME }}
+      STORAGE_ACCOUNT_NAME: ${{ steps.extract.outputs.STORAGE_ACCOUNT_NAME }}
+      AFD_PROFILE_NAME: ${{ steps.extract.outputs.AFD_PROFILE_NAME }}
+      AFD_ENDPOINT_NAME: ${{ steps.extract.outputs.AFD_ENDPOINT_NAME }}
+      AFD_DOMAIN: ${{ steps.extract.outputs.AFD_DOMAIN }}
 
     steps:
       - name: Checkout repository
@@ -35,22 +41,63 @@ jobs:
           terraform_version: "1.15.7"
       
       - name: Terraform Init
-        working-directory: ./infrastructure/terraform
         run: terraform init -input=false
 
-      - name: Get Storage Account Name From Terraform
-        working-directory: ./infrastructure/terraform
-        run: |
-          storage_account_name=$(terraform output -json storage_accounts | jq -r ".frontend.name")
-          echo "STORAGE_ACCOUNT_NAME=$storage_account_name" >> $GITHUB_ENV
+      - name: Extract Terraform outputs
+        id: extract
+        run: |     
+          echo "RESOURCE_GROUP_NAME=$(terraform output -json resource_groups | jq -r ".cloudresumechallenge.name")" >> $GITHUB_OUTPUT 
+          echo "STORAGE_ACCOUNT_NAME=$(terraform output -json storage_accounts | jq -r ".frontend.name")" >> $GITHUB_OUTPUT
+          echo "AFD_PROFILE_NAME=$(terraform output -json frontdoor_profiles | jq -r ".cloudresumechallenge.name")" >> $GITHUB_OUTPUT
+          echo "AFD_ENDPOINT_NAME=$(terraform output -json frontdoor_endpoints | jq -r ".cloudresumechallenge.name")" >> $GITHUB_OUTPUT
+          echo "AFD_DOMAIN=$(terraform output -json frontdoor_custom_domains | jq -r ".cloudresumechallenge.domain")" >> $GITHUB_OUTPUT
 
-      - name: Azure CLI script
+  upload-frontend:
+    needs: terraform
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Azure Login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id:       ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id:       ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Sync Frontend to Azure
         uses: azure/cli@v2
         with:
           azcliversion: latest
           inlineScript: |
             az storage blob sync \
-            --account-name $STORAGE_ACCOUNT_NAME \
+            --account-name ${{ needs.terraform.outputs.STORAGE_ACCOUNT_NAME }} \
             --container '$web' \
             --source ./frontend \
             --auth-mode login
+  
+  cache-purge:
+    needs: [terraform, upload-frontend]
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Azure Login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id:       ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id:       ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Purde AFD Cache
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest
+          inlineScript: |
+            az afd endpoint purge \
+            --resource-group ${{ needs.terraform.outputs.RESOURCE_GROUP_NAME }} \
+            --profile-name ${{ needs.terraform.outputs.AFD_PROFILE_NAME }} \
+            --endpoint-name ${{ needs.terraform.outputs.AFD_ENDPOINT_NAME }} \
+            --domains ${{ needs.terraform.outputs.AFD_DOMAIN }} \
+            --content-paths '/*'
+
