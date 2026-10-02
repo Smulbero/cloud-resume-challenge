@@ -1,6 +1,8 @@
 name: Upload Frontend Files to Azure
 
 on:
+  # Workflow dispatch for testing purposes
+  workflow_dispatch:
   push:
     branches: 
       - main
@@ -89,7 +91,7 @@ jobs:
           tenant-id:       ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Purde AFD Cache
+      - name: Purge AFD Cache
         uses: azure/cli@v2
         with:
           azcliversion: latest
