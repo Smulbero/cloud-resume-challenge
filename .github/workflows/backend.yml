@@ -1,13 +1,13 @@
 name: Upload Backend Files to Azure
 
 on:
-  # Dispatch for testing purposes
-  workflow_dispatch:
-  push:
+  workflow_run:
+    workflows: 
+      - "Test the Backend API"
+    types:
+      - completed
     branches: 
       - main
-    paths: 
-      - "backend/api/**"
 
 permissions:
   id-token: write
