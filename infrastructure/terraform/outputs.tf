@@ -1,3 +1,6 @@
+# ==================================================
+# Resource Groups
+# ==================================================
 output "resource_groups" {
   description = "A mapping of keys to resource group names"
   value = {
@@ -7,6 +10,9 @@ output "resource_groups" {
   }
 }
 
+# ==================================================
+# Cosmos DBs
+# ==================================================
 output "cosmos_db_accounts" {
   description = "A mapping of keys to cosmos db account names and ids"
   value = {
@@ -17,6 +23,9 @@ output "cosmos_db_accounts" {
   }
 }
 
+# ==================================================
+# Front Doors
+# ==================================================
 output "frontdoor_origins" {
   description = "A mapping of keys to front door origin names and host names"
   value = {
@@ -27,6 +36,38 @@ output "frontdoor_origins" {
   }
 }
 
+output "frontdoor_profiles" {
+  value = {
+    for k, v in module.frontdoors.frontdoor_profiles : k => {
+      name = v.name
+    }
+  }
+}
+
+output "frontdoor_endpoints" {
+  value = {
+    for k, v in module.frontdoors.frontdoor_endpoints : k => {
+      name = v.name
+    }
+  }
+}
+
+output "frontdoor_custom_domains" {
+  value = {
+    for k, v in module.frontdoors.frontdoor_custom_domains : k => {
+      domain = v.host_name
+    }
+  }
+}
+
+output "frontdoor_endpoint_hostnames" {
+  description = "A mapping of keys to front door endpoint host names"
+  value       = module.frontdoors.frontdoor_endpoint_hostnames
+}
+
+# ==================================================
+# Function Apps
+# ==================================================
 output "function_apps_flex" {
   description = "A mapping of keys to flex consumption function app names and their managed identity principal ids"
   value = {
@@ -37,11 +78,9 @@ output "function_apps_flex" {
   }
 }
 
-output "frontdoor_endpoint_hostnames" {
-  description = "A mapping of keys to front door endpoint host names"
-  value       = module.frontdoors.frontdoor_endpoint_hostnames
-}
-
+# ==================================================
+# Storage Accounts
+# ==================================================
 output "storage_accounts" {
   description = "A mapping of keys to storage account names"
   value = {
