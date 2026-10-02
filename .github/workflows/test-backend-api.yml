@@ -6,6 +6,11 @@ on:
       - main
     paths:
       - "backend/api/*.py"
+  push:
+    branches:
+      - main
+    paths:
+      - "backend/api/*.py"
 
 jobs:
   build:
