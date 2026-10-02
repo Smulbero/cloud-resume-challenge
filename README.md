@@ -28,9 +28,9 @@ This project builds and deploys a personal resume as a static website, hosted on
 - [x] Deploy a static resume website to the cloud
 - [x] Implement a working, persistent visitor counter
 - [x] Provision all infrastructure using Terraform (no manual/portal setup)
-- [ ] Automate frontend and backend deployment via CI/CD
+- [x] Automate frontend and backend deployment via CI/CD
 - [x] Document architectural decisions as they're made (see [ADRs](docs/adrs/))
-- [ ] Apply basic security scanning to infrastructure code
+- [x] Apply basic security scanning to infrastructure code
 - [x] Configure a custom domain with HTTPS
 
 ---
@@ -54,7 +54,7 @@ This project builds and deploys a personal resume as a static website, hosted on
 | Backend to DB auth        | Managed Identity                            |
 | Infrastructure as Code    | Terraform                                   | 
 | IaC documentation         | terraform-docs                              | 
-| IaC security scanning     | Checkov                                     | 
+| IaC security scanning     | Checkov + tfsec                             | 
 | CI/CD                     | GitHub Actions                              | 
  
 ---
@@ -68,8 +68,8 @@ root
 │   ├── adrs/               
 │   └── architecture/       
 ├── backend/
-│   ├── api/     
-│   └── tests/   
+│   └── api/     
+│       └── tests/   
 ├── frontend/
 │   ├── js/
 │   ├── css/
@@ -77,7 +77,11 @@ root
 ├── infrastructure/
 │   └── terraform/
 │       ├── modules/
+│       │   ├── azure/ 
+│       │   └── cloudflare/ 
 │       └── *.tf
+├── tools/
+│   └── scripts/
 ├── .gitignore
 └── README.md
 ```
@@ -87,9 +91,9 @@ root
 ## Project To-Do's
  
 - [ ] Create architecture diagram(s) and add to `docs/architecture/`
-- [ ] Set up CI/CD pipeline for frontend
-- [ ] Set up CI/CD pipeline for backend
-- [ ] Add Terraform plan/apply pipeline (with Checkov scan step)
-- [ ] Add automated tests for the visitor-count Function
+- [x] Set up CI/CD pipeline for frontend
+- [x] Set up CI/CD pipeline for backend
+- [x] Add Terraform apply pipeline (with Checkov + tfsec scan step)
+- [x] Add automated tests for the visitor-count Function
 - [ ] Automate Cosmos DB Table RBAC role assignment (currently manual — see [docs/cosmos-table-rbac.md](docs/cosmos-table-rbac.md))
 
