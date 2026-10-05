@@ -37,7 +37,13 @@ This project builds and deploys a personal resume as a static website, hosted on
 
 ## Architecture
 
-*Architecture diagrams and such yet to be made*
+### High Level Architecture
+
+![Architecture](docs/architecture/high-level-overview.svg)
+
+### CI/CD & Infrastructure Pipelines
+
+![CI/CD Pipeline](docs/architecture/cicd-pipeline.svg)
 
 ---
 
