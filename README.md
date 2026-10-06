@@ -37,13 +37,17 @@ This project builds and deploys a personal resume as a static website, hosted on
 
 ## Architecture
 
-### High Level Architecture
+### High-Level Architecture
 
 ![Architecture](docs/architecture/high-level-overview.svg)
 
 ### CI/CD & Infrastructure Pipelines
 
 ![CI/CD Pipeline](docs/architecture/cicd-pipeline.svg)
+
+### Terraform Module Dependencies
+
+![Terraform Module Dependencies](docs/architecture/terraform-module-dependencies.svg)
 
 ---
 
@@ -72,7 +76,8 @@ root
 ├── .github/workflows/     
 ├── docs/
 │   ├── adrs/               
-│   └── architecture/       
+│   ├── architecture/               
+│   └── guides/       
 ├── backend/
 │   └── api/     
 │       └── tests/   
@@ -83,8 +88,12 @@ root
 ├── infrastructure/
 │   └── terraform/
 │       ├── modules/
-│       │   ├── azure/ 
+│       │   ├── azure/
+│       │   │   └── <resource/>
+│       │   │       └── *.tf
 │       │   └── cloudflare/ 
+│       │       └── <resource/>
+│       │           └── *.tf
 │       └── *.tf
 ├── tools/
 │   └── scripts/
@@ -96,7 +105,7 @@ root
 
 ## Project To-Do's
  
-- [ ] Create architecture diagram(s) and add to `docs/architecture/`
+- [x] Create architecture diagram(s) and add to `docs/architecture/`
 - [x] Set up CI/CD pipeline for frontend
 - [x] Set up CI/CD pipeline for backend
 - [x] Add Terraform apply pipeline (with Checkov + tfsec scan step)
