@@ -1,171 +1,320 @@
-@media (max-width: 850px) {
-  
-  main {
-    width: 100%;
-  }
-  .grid-container {
-    grid-template-columns: 1fr;
-  }
-}
-
-* {
-  padding: 0;
-  margin: 0;
+/*******************************
+  Reset and tokens
+*******************************/
+*,
+*::before,
+*::after {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 :root {
-  --navy-900: #1b3a5c; /* Section header background and section header font color*/
-  --warm-100: #faf8f5; /* page background */
-  --warm-200: #f0ece5; /* card background */
-  --warm-300: #e8e6e2; /* section background */ 
-  --warm-400: #e0dcd3;
-  --warm-border: #ddd5c7; /* border color */
-  --ink-900: #2b2620; /* Main font color */  
+  --navy-900: #1b3a5c;
+  --warm-200: #f0ece5; /* page background */
+  --warm-300: #e8e6e2; /* header / footer bar */
+  --warm-400: #e0dcd3; /* nav hover */
 
   --color-bg-page: var(--warm-200);
-  --color-bg-card: var(--warm-100);
-  --color-bg-header: var(--navy-900);
-  --color-bg-section: var(--warm-300);
+  --color-bg-paper: #ffffff;
+  --color-bg-bar: var(--warm-300);
   --color-bg-hover: var(--warm-400);
 
-  --color-text-body: var(--ink-900);
-  --color-text-header-dark: var(--navy-900);
-  --color-text-header-light: var(--warm-200);
+  --color-text-body: #1a1a1a;
+  --color-text-muted: #555555;
+  --color-text-nav: var(--navy-900);
+  --color-link: #0b57d0;
+  --color-rule: #8c8c8c;
 
-  --color-border: var(--warm-border);
+  --color-icon-bg: #3b3b3b;
+  --color-icon-fg: #ffffff;
 
-  --font-main: Arial, sans-serif;
+  --font-main: "Roboto", Arial, sans-serif;
+
+  --paper-padding-y: 10mm;
+  --paper-padding-x: 14mm;
+}
+
+/*******************************
+  Base
+*******************************/
+html {
+  font-size: 100%;
 }
 
 body {
   background: var(--color-bg-page);
+  color: var(--color-text-body);
   font-family: var(--font-main);
+  font-size: 0.85rem;
+  line-height: 1.4;
 }
 
-main, header, footer {
+a {
+  color: var(--color-link);
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--color-rule);
+  margin: 8px 0 6px;
+}
+
+header,
+footer {
   width: 100%;
+  background-color: var(--color-bg-bar);
+}
+
+footer {
+  padding: 10px;
+  text-align: center;
 }
 
 main {
   max-width: 210mm;
-  margin: 0 auto;
-  background: var(--color-bg-card);
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
-}
-
-/*******************************
-  Header and Footer
-*******************************/
-header {
-  background-color: var(--color-bg-section);
-  /* position: sticky;
-  top: 0; */
-}
-footer {
-  padding: 10px;
-  text-align: center;
-  background-color: var(--color-bg-section);
+  margin: 20px auto;
+  padding: var(--paper-padding-y) var(--paper-padding-x);
+  background: var(--color-bg-paper);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
 }
 
 /*******************************
   Navbar
 *******************************/
 nav ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
+  list-style: none;
   display: flex;
-  /* justify-content: right; */
   justify-content: center;
 }
 
 nav ul li a {
   display: block;
   padding: 14px 16px;
-  /* border: 1px solid var(--color-border); */
   text-decoration: none;
-  color: var(--color-text-header-dark);
+  color: var(--color-text-nav);
 }
+
 nav ul li a:hover {
   background-color: var(--color-bg-hover);
 }
 
 /*******************************
-  Container
+  Project name + visitor counter
 *******************************/
-.container {
-  margin: 20px 0 20px 0;
-}
-
 #project-name-container {
-  width: 100%;
-  padding: 10px;
   text-align: center;
-  background-color: var(--color-bg-card);
-  color: var(--color-text-header-dark);
+  color: var(--color-text-muted);
 }
-/*******************************
-  Grid
-*******************************/
-.grid-container {
-  display: grid;
-  grid-template-columns: 32% 68%;
+
+#project-name-container h1 {
+  font-size: 0.95rem;
+  /* font-weight: 500; */
+}
+
+#visitor-counter-container {
+  font-size: 0.8rem;
 }
 
 /*******************************
-  Left section
+  Sections
 *******************************/
-#section-left {
-  background-color: var(--color-bg-section);
+.section-container {
+  padding: 2px 0;
 }
 
-.section-left-header {
-  color: var(--color-text-header-dark);
-  padding: 5px;
+.section-container h2 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 4px;
 }
-.section-left-entry-header {
-  font-weight: bold;
-}
-.section-left-entry-content {
-  padding: 5px;
-}
-.section-left-entry-content-sub {
-  margin-bottom: 5px;
+
+.divider {
+  margin: 0 0.35em;
+  color: var(--color-text-muted);
+  font-weight: 400;
+  font-style: normal;
 }
 
 /*******************************
-  Right section
+  Article items (shared)
 *******************************/
-.section-right-header {
-  background-color: var(--color-bg-header);
+.article-item {
+  margin-bottom: 0.15rem;
+}
+
+.article-item-meta {
+  font-weight: 700;
+}
+
+.article-item-description {
+  font-style: normal;
+}
+
+ul.article-item-description:not(:has(li)) {
+  display: none;
+}
+
+/*******************************
+  Banner
+*******************************/
+#banner {
   text-align: center;
-  color: var(--color-text-header-light);
-  padding: 5px;
 }
 
-.section-right-entry-header {
-  background-color: var(--color-bg-section);
-  padding: 3px;
+#banner h2 {
+  font-size: 1.75rem;
+  line-height: 1.2;
+  margin-bottom: 2px;
 }
 
-.section-right-entry-content {
-  padding: 5px;
-  background-color: var(--color-bg-card);
+#banner h3 {
+  font-size: 1.15rem;
+  font-weight: 500;
+}
+
+#info-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 6px 0;
+  margin: 10px 0 8px;
+}
+
+.contact-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+#info-container .divider {
+  margin: 0 10px;
+}
+
+#info-container .fa {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  font-size: 18px;
+  color: var(--color-icon-fg);
+  background: var(--color-icon-bg);
+  border-radius: 4px;
+}
+
+/* GitHub logo is a plain glyph, not a square */
+#info-container .fa-github {
+  width: auto;
+  height: auto;
+  font-size: 30px;
+  color: var(--color-icon-bg);
+  background: none;
+}
+
+/*******************************
+  Profile
+*******************************/
+#profile .article-item-description {
+  display: block;
   text-align: justify;
-  text-justify: inter-word;
-}
-
-.section-right-entry-content ul {
-  padding: 5px 5px 5px 20px;
-}
-
-.section-right-entry-content p {
-  margin-bottom: 3px;
+  hyphens: auto;
 }
 
 /*******************************
-  Visitor Counter
+  Professional experience
 *******************************/
-/* #visitor-counter-container {
-} */
+#professional-experience .article-item {
+  margin-bottom: 0.6rem;
+}
+
+#professional-experience .article-item-meta {
+  display: block;
+  margin-bottom: 1px;
+}
+
+#professional-experience ul.article-item-description {
+  list-style-type: square;
+  padding-left: 1.4rem;
+}
+
+#professional-experience li::marker {
+  font-size: 0.85em;
+}
+
+/*******************************
+  Technical skills + Certificates
+  Two-column rows: bold label, italic value
+*******************************/
+#technical-skills,
+#certificates {
+  --label-width: 8.5rem;
+}
+
+#technical-skills .article-item,
+#certificates .article-item {
+  display: grid;
+  grid-template-columns: var(--label-width) 1fr;
+  column-gap: 0.5rem;
+  margin-bottom: 1px;
+}
+
+#technical-skills .article-item-description,
+#certificates .article-item-description,
+#languages .article-item-description,
+#education .article-item-description {
+  font-style: italic;
+}
+
+/*******************************
+  Personal projects
+*******************************/
+#personal-projects .article-item-meta,
+#personal-projects .article-item-description {
+  display: block;
+}
+
+#personal-projects .article-item-meta {
+  margin-bottom: 2px;
+}
+
+/*******************************
+  Education
+*******************************/
+#education .article-item {
+  margin-bottom: 2px;
+}
+
+/*******************************
+  Responsiveness
+*******************************/
+@media (max-width: 850px) {
+  main {
+    margin: 0 auto;
+    padding: 6mm 5mm;
+    box-shadow: none;
+  }
+}
+
+@media (max-width: 520px) {
+  #banner h2 {
+    font-size: 1.4rem;
+  }
+
+  #info-container {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  #info-container .divider {
+    display: none;
+  }
+
+  #technical-skills .article-item,
+  #certificates .article-item {
+    grid-template-columns: 1fr;
+    margin-bottom: 4px;
+  }
+}
