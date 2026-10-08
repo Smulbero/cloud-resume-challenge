@@ -4,6 +4,8 @@
  
 **🔗 Live site:** [crc.smulbero.com](https://crc.smulbero.com/) (Under maintenance)
 
+![Live Site](docs/live-site.png)
+
 ---
 
 ## Table of Content
