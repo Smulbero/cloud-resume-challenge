@@ -5,7 +5,7 @@
 crash.log
 crash.*.log
 # Include .tfvars configuration file as part of public portfolio which is also used as part of Github Action workflows
-!/terraform/*.tfvars
+!*/terraform/*.tfvars
 *.tfvars.json
 override.tf
 override.tf.json
