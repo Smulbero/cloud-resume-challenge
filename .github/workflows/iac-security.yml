@@ -46,6 +46,7 @@ jobs:
             --out tfsec.sarif
 
       - name: Upload SARIF (tfsec)
+        if: always()
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: tfsec.sarif
@@ -101,6 +102,7 @@ jobs:
           output_file_path: checkov.sarif
 
       - name: Upload SARIF (Checkov)
+        if: always()
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: checkov.sarif
