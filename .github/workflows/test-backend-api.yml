@@ -5,12 +5,12 @@ on:
     branches:
       - main
     paths:
-      - "backend/api/*.py"
+      - "backend/api/**"
   push:
     branches:
       - main
     paths:
-      - "backend/api/*.py"
+      - "backend/api/**"
 
 jobs:
   build:
